@@ -26,7 +26,13 @@ Kraken2 heeft een aantal requirements, installeer deze eerst:
 1. zlib
 > (sudo) apt install zlib1g-dev
 2. Krona
-> (sudo) apt install krona
+```bash 
+git clone https://github.com/marbl/Krona.git
+cd Krona/KronaTools
+sudo ./install.pl
+
+mkdir taxonomy && ./updateTaxonomy
+```
 
 Hierna kan de binary van Kraken2 gecompileerd en geinstalleerd worden:
 ```bash
@@ -57,7 +63,7 @@ sudo ln -s PWD_OUTPUT /virology_db
 rm viral-jgi-krakendb-all.tar.gz
 ```
 
-## Test run
+## kraken test run
 ```bash
-kraken2 --db /virology_db --threads 4 test.fasta
+kraken2 --db /virology_db --threads 4 --report out.txt *.fasta
 ```

@@ -1,5 +1,14 @@
 # Bin Pipeline
-Dit is een repo voor de bio informatica toolbox.
+- [Bin Pipeline](#bin-pipeline)
+  - [Inleiding](#inleiding)
+  - [Hoofdvraag:](#hoofdvraag)
+    - [Tools:](#tools)
+    - [Requirements](#requirements)
+- [Installation Instructions](#installation-instructions)
+  - [FASTP](#fastp)
+  - [Kraken2](#kraken2)
+  - [Download de virology database voor kraken2](#download-de-virology-database-voor-kraken2)
+  - [kraken test run](#kraken-test-run)
 
 
 ## Inleiding 
@@ -96,6 +105,7 @@ rm viral-jgi-krakendb-all.tar.gz
 ```
 
 ## kraken test run
+run dit command in een dir met bv een fasta bestand
 ```bash
 kraken2 --db /virology_db --threads 4 --report out.txt *.fasta
 ```

@@ -3,82 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bin Pipeline - Viral Classification</title>
+    <title>Ons Project: Bin Pipeline</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>Bin Pipeline: Viral DNA Classification</h1>
-    <p class="subtitle">Onderzoeksvraag: <em>“Hoe kunnen we DNA-data van verschillende soorten virussen specifiek classificeren en visualiseren?”</em></p>
+    <h1>Bin Pipeline: Het Classificeren van Virussen</h1>
+    <p class="subtitle">Ons proces in het bouwen van een interactieve bio-informatica interface.</p>
 </header>
 
 <main>
-    <section id="inleiding">
-        <h2>Inleiding</h2>
-        <p>Voor de BIN toolbox bouwen we een interface die bio-informatica tools aanstuurt. Het doel is om hobbyisten, studenten en onderzoekers een toegankelijke manier te bieden om virussen te diagnosticeren, vergelijkbaar met systemen van het RIVM.</p>
+    <section id="ons-verhaal">
+        <h2>Het Project</h2>
+        <p>Voor de opdracht van de <strong>BIN toolbox</strong> kregen wij de taak om een website te bouwen die een complexe bio-informatica pipeline aanstuurt. Onze opdrachtgevers, Ronald W. en Peter K., vroegen ons om een interface te creëren die niet alleen tools aanroept, maar ook interim-rapporten deelt met de gebruiker.</p>
+        <p>Wij hebben ons gericht op een doelgroep van hobbyisten, studenten en onderzoekers die snel inzicht willen krijgen in DNA-sequenties.</p>
         
-        <div class="tool-container">
-            <strong>Gebruikte Tools:</strong>
-            <span class="tool-tag">FASTP</span>
-            <span class="tool-tag">KRAKEN2</span>
-            <span class="tool-tag">KRONA</span>
+        <div class="quote-box">
+            <p>“Hoe kunnen we DNA-data van verschillende soorten virussen specifiek classificeren en visualiseren?”</p>
         </div>
     </section>
 
-    <section id="requirements">
-        <h2>Requirements</h2>
+    <section id="de-keuzes">
+        <h2>Onze Keuzes & Tools</h2>
+        <p>De keuze van de tools was vrij. Wij hebben specifiek gekozen voor een combinatie van snelheid en visuele kracht:</p>
         <ul>
-            <li>Linux (of WSL) & Python 3.x</li>
-            <li>libisal-dev & libdeflate-dev</li>
-            <li>build-essential & zlib1g-dev</li>
-            <li>Krona & Flask</li>
+            <li><strong>FastP:</strong> Voor de noodzakelijke kwaliteitscontrole en preprocessing van de ruwe data.</li>
+            <li><strong>Kraken2:</strong> Vanwege de ongekende snelheid in het classificeren van DNA-reads tegen een database.</li>
+            <li><strong>Krona:</strong> Om de complexe data om te zetten in interactieve cirkeldiagrammen die voor iedereen begrijpelijk zijn.</li>
         </ul>
     </section>
 
-    <section id="installation">
-        <h2>Installation Instructions</h2>
+    <section id="het-proces">
+        <h2>Hoe we het hebben aangepakt</h2>
         
-        <h3>FASTP</h3>
-        <p>Installeer requirements en compileer de binary:</p>
-        <pre><code>sudo apt install libdeflate-dev libisal-dev build-essential
-wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz
-tar -xf v1.1.0.tar.gz
-cd fastp-1.1.0/
-make -j
-sudo make install</code></pre>
+        <h3>1. De Omgeving Opzetten</h3>
+        <p>We zijn begonnen met het inrichten van een Linux-omgeving (WSL). Hierbij moesten we diverse dependencies installeren om de tools te kunnen compileren. Denk hierbij aan bibliotheken zoals <code>libisal</code> en <code>libdeflate</code> voor optimale snelheid.</p>
 
-        <h3>Kraken2 & Krona</h3>
-        <p>Installeer Krona visualisatie en daarna de Kraken2 engine:</p>
-        <pre><code># Krona
-git clone https://github.com/marbl/Krona.git
-cd Krona/KronaTools
-sudo ./install.pl
-mkdir taxonomy && ./updateTaxonomy
-
-# Kraken2
-wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz
-tar -xf v2.17.1.tar.gz
-cd kraken2-2.17.1/
-chmod +x install_kraken2.sh
-sudo ./install_kraken2.sh /usr/local/bin</code></pre>
+        <h3>2. Installatie & Compilatie</h3>
+        <p>In plaats van kant-en-klare pakketten, hebben we de broncode van <strong>FastP</strong> en <strong>Kraken2</strong> zelf gecompileerd. Dit stelde ons in staat om de tools direct vanuit de terminal (<code>make -j</code>) te installeren op onze systemen.</p>
+        
+        <h3>3. Database Management</h3>
+        <p>Een cruciaal onderdeel was de virology database. We hebben de JGI-database binnengehaald en via <em>symbolic links</em> (<code>ln -s</code>) gekoppeld aan onze pipeline. Hierdoor bleef onze mappenstructuur overzichtelijk, terwijl de zware data op de juiste plek stond.</p>
     </section>
 
-    <section id="run">
-        <h2>Database & Test Run</h2>
-        <p>Download de virology database en koppel deze via een symlink:</p>
-        <pre><code>mkdir viral_db && cd viral_db
-wget [DATABASE_URL]
-tar -xf viral-jgi-krakend-all
-sudo ln -s $(pwd) /virology_db</code></pre>
-
-        <p>Start de analyse:</p>
-        <pre><code>kraken2 --db /virology_db --threads 4 --report out.txt *.fasta</code></pre>
+    <section id="het-resultaat">
+        <h2>Het Resultaat</h2>
+        <p>Uiteindelijk hebben we een systeem gebouwd waar een simpele test run direct resultaat geeft. Door het aanroepen van Kraken2 op een set FASTA-bestanden, genereert onze pipeline een gedetailleerd rapport (<code>out.txt</code>) dat vervolgens door Krona gevisualiseerd kan worden.</p>
+        <p>Hiermee imiteren we de professionele tools die instanties zoals het RIVM gebruiken voor snelle virusdiagnostiek.</p>
     </section>
 </main>
 
 <footer>
-    <p>Opdrachtgevers: Ronald W. & Peter K. | Bin Pipeline Project 2026</p>
+    <p>Project ontwikkeld door: Jesse & Team | In opdracht van Ronald W. & Peter K. | 2026</p>
 </footer>
 
 </body>

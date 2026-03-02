@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bin Pipeline - Viral Classification</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Bin Pipeline: Viral DNA Classification</h1>
+    <p class="subtitle">Onderzoeksvraag: <em>“Hoe kunnen we DNA-data van verschillende soorten virussen specifiek classificeren en visualiseren?”</em></p>
+</header>
+
+<main>
+    <section id="inleiding">
+        <h2>Inleiding</h2>
+        <p>Voor de <strong>BIN toolbox</strong> bouwen we een interface die bio-informatica tools aanstuurt. Het doel is om hobbyisten, studenten en onderzoekers een toegankelijke manier te bieden om virussen te diagnosticeren, vergelijkbaar met systemen van het RIVM.</p>
+        
+        <div class="tool-container">
+            <strong>Gebruikte Tools:</strong>
+            <span class="tool-tag">FASTP</span>
+            <span class="tool-tag">KRAKEN2</span>
+            <span class="tool-tag">KRONA</span>
+        </div>
+    </section>
+
+    <section id="requirements">
+        <h2>Requirements</h2>
+        <ul>
+            <li>Linux (of WSL) & Python 3.x</li>
+            <li>libisal-dev & libdeflate-dev</li>
+            <li>build-essential & zlib1g-dev</li>
+            <li>Krona & Flask</li>
+        </ul>
+    </section>
+
+    <section id="installation">
+        <h2>Installation Instructions</h2>
+        
+        <h3>FASTP</h3>
+        <p>Installeer requirements en compileer de binary:</p>
+        <pre><code>sudo apt install libdeflate-dev libisal-dev build-essential
+wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz
+tar -xf v1.1.0.tar.gz
+cd fastp-1.1.0/
+make -j
+sudo make install</code></pre>
+
+        <h3>Kraken2 & Krona</h3>
+        <p>Installeer Krona visualisatie en daarna de Kraken2 engine:</p>
+        <pre><code># Krona
+git clone https://github.com/marbl/Krona.git
+cd Krona/KronaTools
+sudo ./install.pl
+mkdir taxonomy && ./updateTaxonomy
+
+# Kraken2
+wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz
+tar -xf v2.17.1.tar.gz
+cd kraken2-2.17.1/
+chmod +x install_kraken2.sh
+sudo ./install_kraken2.sh /usr/local/bin</code></pre>
+    </section>
+
+    <section id="run">
+        <h2>Database & Test Run</h2>
+        <p>Download de virology database en koppel deze via een symlink:</p>
+        <pre><code>mkdir viral_db && cd viral_db
+wget [DATABASE_URL]
+tar -xf viral-jgi-krakend-all
+sudo ln -s $(pwd) /virology_db</code></pre>
+
+        <p>Start de analyse:</p>
+        <pre><code>kraken2 --db /virology_db --threads 4 --report out.txt *.fasta</code></pre>
+    </section>
+</main>
+
+<footer>
+    <p>Opdrachtgevers: Ronald W. & Peter K. | Bin Pipeline Project 2026</p>
+</footer>
+
+</body>
+</html>

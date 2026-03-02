@@ -1,3 +1,6 @@
 # gitignore for pipeline
 
 
+/virus_human_db
+/Krona
+install.sh

@@ -3,59 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ons Project: Bin Pipeline</title>
+    <title>Project: Virus Scanner Pipeline</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>Bin Pipeline: Het Classificeren van Virussen</h1>
-    <p class="subtitle">Ons proces in het bouwen van een interactieve bio-informatica interface.</p>
+    <h1>Project: Bin Pipeline</h1>
+    <p class="subtitle">Hoe wij een website bouwden om virussen in DNA te herkennen.</p>
 </header>
 
 <main>
-    <section id="ons-verhaal">
-        <h2>Het Project</h2>
-        <p>Voor de opdracht van de <strong>BIN toolbox</strong> kregen wij de taak om een website te bouwen die een complexe bio-informatica pipeline aanstuurt. Onze opdrachtgevers, Ronald W. en Peter K., vroegen ons om een interface te creëren die niet alleen tools aanroept, maar ook interim-rapporten deelt met de gebruiker.</p>
-        <p>Wij hebben ons gericht op een doelgroep van hobbyisten, studenten en onderzoekers die snel inzicht willen krijgen in DNA-sequenties.</p>
+    <section id="wat-is-het">
+        <h2>Wat hebben we gedaan?</h2>
+        <p>Voor het vak <strong>BIN toolbox</strong> hebben we een website gemaakt die ingewikkelde computerprogramma's (tools) voor biologie aanstuurt. Onze opdrachtgevers, Ronald W. en Peter K., wilden graag een interface die makkelijk te gebruiken is voor studenten en onderzoekers.</p>
         
         <div class="quote-box">
-            <p>“Hoe kunnen we DNA-data van verschillende soorten virussen specifiek classificeren en visualiseren?”</p>
+            <p>“Onze hoofdvraag: Hoe kunnen we DNA-data van verschillende virussen snel herkennen en laten zien?”</p>
         </div>
+        <p>Dit is belangrijk omdat we door Covid-19 hebben gezien hoe cruciaal het is om snel te weten welk virus iemand heeft. Onze tool werkt een beetje zoals de systemen bij het RIVM.</p>
     </section>
 
-    <section id="de-keuzes">
-        <h2>Onze Keuzes & Tools</h2>
-        <p>De keuze van de tools was vrij. Wij hebben specifiek gekozen voor een combinatie van snelheid en visuele kracht:</p>
+    
+
+    <section id="de-tools">
+        <h2>Welke tools hebben we gekozen?</h2>
+        <p>We hebben drie hoofprogramma's gebruikt om de DNA-data te verwerken:</p>
         <ul>
-            <li><strong>FastP:</strong> Voor de noodzakelijke kwaliteitscontrole en preprocessing van de ruwe data.</li>
-            <li><strong>Kraken2:</strong> Vanwege de ongekende snelheid in het classificeren van DNA-reads tegen een database.</li>
-            <li><strong>Krona:</strong> Om de complexe data om te zetten in interactieve cirkeldiagrammen die voor iedereen begrijpelijk zijn.</li>
+            <li><strong>FastP:</strong> Deze tool ruimt de data op. Het verwijdert foutjes uit de DNA-metingen zodat de resultaten betrouwbaar zijn.</li>
+            <li><strong>Kraken2:</strong> Dit is de 'zoekmachine'. Het vergelijkt de DNA-stukjes razendsnel met een enorme database van bekende virussen.</li>
+            <li><strong>Krona:</strong> Hiermee maken we een interactief taartdiagram, zodat je in één oogopslag ziet welke virussen er gevonden zijn.</li>
         </ul>
     </section>
+
+    
 
     <section id="het-proces">
         <h2>Hoe we het hebben aangepakt</h2>
         
-        <h3>1. De Omgeving Opzetten</h3>
-        <p>We zijn begonnen met het inrichten van een Linux-omgeving (WSL). Hierbij moesten we diverse dependencies installeren om de tools te kunnen compileren. Denk hierbij aan bibliotheken zoals <code>libisal</code> en <code>libdeflate</code> voor optimale snelheid.</p>
+        <h3>Stap 1: De basis leggen</h3>
+        <p>We hebben gewerkt in Linux (via WSL). Dit is nodig omdat de meeste biologie-software niet goed werkt op de standaard Windows. We moesten eerst hulp-bestanden (zoals <code>libisal</code>) installeren om de computer klaar te maken.</p>
 
-        <h3>2. Installatie & Compilatie</h3>
-        <p>In plaats van kant-en-klare pakketten, hebben we de broncode van <strong>FastP</strong> en <strong>Kraken2</strong> zelf gecompileerd. Dit stelde ons in staat om de tools direct vanuit de terminal (<code>make -j</code>) te installeren op onze systemen.</p>
+        <h3>Stap 2: Software installeren</h3>
+        <p>In plaats van een simpel installatieprogramma, hebben we de broncode van FastP en Kraken2zelf opgebouwd op de computer. Dit noemen we 'compileren'. Zo weten we zeker dat de software precies goed werkt voor ons systeem.</p>
         
-        <h3>3. Database Management</h3>
-        <p>Een cruciaal onderdeel was de virology database. We hebben de JGI-database binnengehaald en via <em>symbolic links</em> (<code>ln -s</code>) gekoppeld aan onze pipeline. Hierdoor bleef onze mappenstructuur overzichtelijk, terwijl de zware data op de juiste plek stond.</p>
+        <h3>Stap 3: De virus-database</h3>
+        <p>Een scanner werkt niet zonder kennis. We hebben een database met virus-informatie gedownload. Om ruimte te besparen en het overzichtelijk te houden, hebben we deze met een slimme koppeling (een 'symlink') aan ons project verbonden.</p>
     </section>
 
-    <section id="het-resultaat">
-        <h2>Het Resultaat</h2>
-        <p>Uiteindelijk hebben we een systeem gebouwd waar een simpele test run direct resultaat geeft. Door het aanroepen van Kraken2 op een set FASTA-bestanden, genereert onze pipeline een gedetailleerd rapport (<code>out.txt</code>) dat vervolgens door Krona gevisualiseerd kan worden.</p>
-        <p>Hiermee imiteren we de professionele tools die instanties zoals het RIVM gebruiken voor snelle virusdiagnostiek.</p>
+    <section id="resultaat">
+        <h2>Het resultaat</h2>
+        <p>We hebben nu een werkende pipeline. Als je een bestand met DNA-codes invoert, gaat de software aan de slag en krijg je een rapport terug waarin staat welk virus er in het monster zit.</p>
     </section>
 </main>
 
 <footer>
-    <p>Project ontwikkeld door: Jesse & Team | In opdracht van Ronald W. & Peter K. | 2026</p>
+    <p>Projectgroep: Jesse en Robin</p>
 </footer>
 
 </body>

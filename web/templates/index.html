@@ -6,79 +6,64 @@
     <title>FASTQ Analysis Pipeline</title>
     <link rel="stylesheet" href="../static/css/stylesheet.css">
 </head>
+
 <body>
     <div class="container">
         <h1>FASTQ Analysis Pipeline</h1>
-
-        <!-- File Input Section -->
-        <div class="section">
-            <h2>Input Files</h2>
-            <label for="fastq-file">Upload FASTQ File:</label>
-            <input type="file" id="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
-        </div>
-
-        <!-- fastp Configuration -->
+        <form method="POST" enctype="multipart/form-data">
+            <div class="section">
+                <h2>Input Files</h2>
+                <label for="fastq-file">Upload FASTQ File:</label>
+                <input type="file" id="fastq-file" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+            </div>
         <div class="section">
             <h2>fastp Configuration</h2>
             <div class="config-group">
                 <label for="fastp-q">Quality Threshold:</label>
-                <input type="number" id="fastp-q" value="15" min="0" max="40">
+                <input type="number" id="fastp-q" name="fastp-q" value="15" min="0" max="40">
 
                 <label for="fastp-l">Minimum Length:</label>
-                <input type="number" id="fastp-l" value="60" min="1">
+                <input type="number" id="fastp-l" name="fastp-l" value="60" min="1">
 
                 <label for="fastp-thread">Threads:</label>
-                <input type="number" id="fastp-thread" value="4" min="1">
+                <input type="number" id="fastp-thread" name="fastp-thread" value="4" min="1">
 
                 <label for="fastp-adapter">Trim Adapters:</label>
-                <select id="fastp-adapter">
+                <select id="fastp-adapter" name="fastp-adapter">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
             </div>
         </div>
-
-        <!-- Kraken2 Configuration -->
         <div class="section">
             <h2>Kraken2 Configuration</h2>
             <div class="config-group">
                 <label for="kraken-db">Database:</label>
-                <select id="kraken-db">
+                <select id="kraken-db" name="kraken-db">
                     <option value="standard">Standard</option>
                     <option value="standard-8gb">Standard-8GB</option>
                     <option value="viral">Viral</option>
                 </select>
 
                 <label for="kraken-confidence">Confidence Threshold:</label>
-                <input type="number" id="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
+                <input type="number" id="kraken-confidence" name="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
 
                 <label for="kraken-thread">Threads:</label>
-                <input type="number" id="kraken-thread" value="4" min="1">
+                <input type="number" id="kraken-thread" name="kraken-thread" value="4" min="1">
             </div>
         </div>
-
-        <!-- Submit Button -->
         <div class="section">
-            <button onclick="submitAnalysis()">Start Analysis</button>
+            <button type="submit">Submit for Analysis</button>
         </div>
 
-        <!-- Results Section -->
         <div id="results" class="section">
             <h2>Results</h2>
             <div id="krona-plot"></div>
         </div>
+        </form>
     </div>
 
-    <script>
-        function submitAnalysis() {
-            const fastqFile = document.getElementById('fastq-file').files[0];
-            if (!fastqFile) {
-                alert('Please select a FASTQ file');
-                return;
-            }
-            // API call would go here
-            console.log('Starting analysis...');
-        }
-    </script>
+    <!-- JavaScript functionality should be implemented in Flask backend using template logic and form handling -->
+
 </body>
 </html>

@@ -3,63 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project: Virus Scanner Pipeline</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bin Pipeline - Bio-informatica Dashboard</title>
+    <link rel="stylesheet" href="../static/css/stylesheet.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Bin Pipeline</h1>
+        <p style="text-align: center; color: #666;">Een interactieve interface voor virus-classificatie</p>
 
-<header>
-    <h1>Project: Bin Pipeline</h1>
-    <p class="subtitle">Hoe wij een website bouwden om virussen in DNA te herkennen.</p>
-</header>
+        <div class="section">
+            <h2>Ons Project</h2>
+            <p>Voor het vak <strong>BIN toolbox</strong> hebben we een website gemaakt die biologie-tools aanstuurt. Het doel is om snel en simpel virussen in DNA-monsters te herkennen.</p>
+            
+            <div class="config-group" style="font-style: italic; border-left: 5px solid #007bff;">
+                <p>“Onze hoofdvraag: Hoe kunnen we DNA-data van verschillende virussen specifiek classificeren en laten zien?”</p>
+            </div>
 
-<main>
-    <section id="wat-is-het">
-        <h2>Wat hebben we gedaan?</h2>
-        <p>Voor het vak <strong>BIN toolbox</strong> hebben we een website gemaakt die ingewikkelde computerprogramma's (tools) voor biologie aanstuurt. Onze opdrachtgevers, Ronald W. en Peter K., wilden graag een interface die makkelijk te gebruiken is voor studenten en onderzoekers.</p>
-        
-        <div class="quote-box">
-            <p>“Onze hoofdvraag: Hoe kunnen we DNA-data van verschillende virussen snel herkennen en laten zien?”</p>
+            <p>We hebben gekozen voor een pipeline met <strong>fastp</strong> (voor het opschonen), <strong>Kraken2</strong> (voor de herkenning) en <strong>Krona</strong> (voor de grafieken). Hieronder kun je de pipeline zelf instellen en starten.</p>
         </div>
-        <p>Dit is belangrijk omdat we door Covid-19 hebben gezien hoe cruciaal het is om snel te weten welk virus iemand heeft. Onze tool werkt een beetje zoals de systemen bij het RIVM.</p>
-    </section>
 
-    
-
-    <section id="de-tools">
-        <h2>Welke tools hebben we gekozen?</h2>
-        <p>We hebben drie hoofprogramma's gebruikt om de DNA-data te verwerken:</p>
-        <ul>
-            <li><strong>FastP:</strong> Deze tool ruimt de data op. Het verwijdert foutjes uit de DNA-metingen zodat de resultaten betrouwbaar zijn.</li>
-            <li><strong>Kraken2:</strong> Dit is de 'zoekmachine'. Het vergelijkt de DNA-stukjes razendsnel met een enorme database van bekende virussen.</li>
-            <li><strong>Krona:</strong> Hiermee maken we een interactief taartdiagram, zodat je in één oogopslag ziet welke virussen er gevonden zijn.</li>
-        </ul>
-    </section>
-
-    
-
-    <section id="het-proces">
-        <h2>Hoe we het hebben aangepakt</h2>
         
-        <h3>Stap 1: De basis leggen</h3>
-        <p>We hebben gewerkt in Linux (via WSL). Dit is nodig omdat de meeste biologie-software niet goed werkt op de standaard Windows. We moesten eerst hulp-bestanden (zoals <code>libisal</code>) installeren om de computer klaar te maken.</p>
 
-        <h3>Stap 2: Software installeren</h3>
-        <p>In plaats van een simpel installatieprogramma, hebben we de broncode van FastP en Kraken2zelf opgebouwd op de computer. Dit noemen we 'compileren'. Zo weten we zeker dat de software precies goed werkt voor ons systeem.</p>
+        <div class="section">
+            <h2>Stap 1: Data Inladen</h2>
+            <p>Selecteer het FASTQ bestand met de DNA-codes die je wilt analyseren.</p>
+            <label for="fastq-file">Upload FASTQ Bestand:</label>
+            <input type="file" id="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+        </div>
+
+        <div class="section">
+            <h2>Stap 2: fastp Configuratie (Opschonen)</h2>
+            <p>Stel hier in hoe streng de software moet zijn bij het controleren van de DNA-kwaliteit.</p>
+            <div class="config-group">
+                <label for="fastp-q">Kwaliteitsgrens (Q-score):</label>
+                <input type="number" id="fastp-q" value="15" min="0" max="40">
+
+                <label for="fastp-l">Minimale Lengte (nucleotiden):</label>
+                <input type="number" id="fastp-l" value="60" min="1">
+
+                <label for="fastp-thread">Threads (Rekenkracht):</label>
+                <input type="number" id="fastp-thread" value="4" min="1">
+
+                <label for="fastp-adapter">Trim Adapters (Stukjes wegknippen):</label>
+                <select id="fastp-adapter">
+                    <option value="true">Ja, automatisch</option>
+                    <option value="false">Nee, overslaan</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Stap 3: Kraken2 Configuratie (Herkenning)</h2>
+            <p>Kies de virus-database waarmee de computer de data moet vergelijken.</p>
+            <div class="config-group">
+                <label for="kraken-db">Selecteer Database:</label>
+                <select id="kraken-db">
+                    <option value="viral">Viral (Focus op virussen)</option>
+                    <option value="standard">Standaard (Alles)</option>
+                    <option value="standard-8gb">Lichtgewicht (Snel)</option>
+                </select>
+
+                <label for="kraken-confidence">Betrouwbaarheid (0 tot 1):</label>
+                <input type="number" id="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
+
+                <label for="kraken-thread">Threads (Rekenkracht):</label>
+                <input type="number" id="kraken-thread" value="4" min="1">
+            </div>
+        </div>
+
+        <div class="section" style="text-align: center;">
+            <button onclick="submitAnalysis()">Start de Pipeline</button>
+        </div>
+
         
-        <h3>Stap 3: De virus-database</h3>
-        <p>Een scanner werkt niet zonder kennis. We hebben een database met virus-informatie gedownload. Om ruimte te besparen en het overzichtelijk te houden, hebben we deze met een slimme koppeling (een 'symlink') aan ons project verbonden.</p>
-    </section>
 
-    <section id="resultaat">
-        <h2>Het resultaat</h2>
-        <p>We hebben nu een werkende pipeline. Als je een bestand met DNA-codes invoert, gaat de software aan de slag en krijg je een rapport terug waarin staat welk virus er in het monster zit.</p>
-    </section>
-</main>
+        <div id="results" class="section">
+            <h2>Resultaten & Visualisatie</h2>
+            <p>De analyse is klaar. Hieronder zie je welke organismen er in je monster zijn gevonden.</p>
+            <div id="krona-plot" style="min-height: 200px; border: 1px dashed #ccc; padding: 20px;">
+                <p style="text-align: center; color: #999;">[De interactieve grafiek wordt hier geladen...]</p>
+            </div>
+        </div>
 
-<footer>
-    <p>Projectgroep: Jesse en Robin</p>
-</footer>
+        <footer style="text-align: center; margin-top: 40px; color: #888;">
+            <p>Projectgroep: Jesse & Team | HBO Bio-informatica 2026</p>
+        </footer>
+    </div>
 
+    <script>
+        function submitAnalysis() {
+            const fastqFile = document.getElementById('fastq-file').files[0];
+            if (!fastqFile) {
+                alert('Selecteer eerst een FASTQ bestand.');
+                return;
+            }
+            // Maak de resultaten zichtbaar
+            document.getElementById('results').style.display = 'block';
+            console.log('Analyse gestart...');
+        }
+    </script>
 </body>
 </html>

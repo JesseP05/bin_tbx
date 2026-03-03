@@ -6,64 +6,80 @@
     <title>FASTQ Analysis Pipeline</title>
     <link rel="stylesheet" href="../static/css/stylesheet.css">
 </head>
-
 <body>
     <div class="container">
         <h1>FASTQ Analysis Pipeline</h1>
+        <p class="meta">Course: BIN Toolbox | Team: Jesse & Robin</p>
+
         <form method="POST" enctype="multipart/form-data">
             <div class="section">
                 <h2>Input Files</h2>
-                <label for="fastq-file">Upload FASTQ File:</label>
-                <input type="file" id="fastq-file" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+                <label>
+                    Upload FASTQ file
+                    <input type="file" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+                </label>
             </div>
-        <div class="section">
-            <h2>fastp Configuration</h2>
-            <div class="config-group">
-                <label for="fastp-q">Quality Threshold:</label>
-                <input type="number" id="fastp-q" name="fastp-q" value="15" min="0" max="40">
+            <div class="section">
+                <h2>fastp Configuration</h2>
+                <div class="config-group">
+                    <label>
+                        Quality threshold
+                        <input type="number" name="fastp-q" value="15" min="0" max="40">
+                    </label>
 
-                <label for="fastp-l">Minimum Length:</label>
-                <input type="number" id="fastp-l" name="fastp-l" value="60" min="1">
+                    <label>
+                        Minimum length
+                        <input type="number" name="fastp-l" value="60" min="1">
+                    </label>
 
-                <label for="fastp-thread">Threads:</label>
-                <input type="number" id="fastp-thread" name="fastp-thread" value="4" min="1">
+                    <label>
+                        Threads
+                        <input type="number" name="fastp-thread" value="4" min="1">
+                    </label>
 
-                <label for="fastp-adapter">Trim Adapters:</label>
-                <select id="fastp-adapter" name="fastp-adapter">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
+                    <label>
+                        Trim adapters
+                        <select name="fastp-adapter">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="section">
-            <h2>Kraken2 Configuration</h2>
-            <div class="config-group">
-                <label for="kraken-db">Database:</label>
-                <select id="kraken-db" name="kraken-db">
-                    <option value="standard">Standard</option>
-                    <option value="standard-8gb">Standard-8GB</option>
-                    <option value="viral">Viral</option>
-                </select>
 
-                <label for="kraken-confidence">Confidence Threshold:</label>
-                <input type="number" id="kraken-confidence" name="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
+            <div class="section">
+                <h2>Kraken2 Configuration</h2>
+                <div class="config-group">
+                    <label>
+                        Database
+                        <select name="kraken-db">
+                            <option value="standard">Standard</option>
+                            <option value="standard-8gb">Standard-8GB</option>
+                            <option value="viral">Viral</option>
+                        </select>
+                    </label>
 
-                <label for="kraken-thread">Threads:</label>
-                <input type="number" id="kraken-thread" name="kraken-thread" value="4" min="1">
+                    <label>
+                        Confidence threshold
+                        <input type="number" name="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
+                    </label>
+
+                    <label>
+                        Threads
+                        <input type="number" name="kraken-thread" value="4" min="1">
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="section">
-            <button type="submit">Submit for Analysis</button>
-        </div>
 
-        <div id="results" class="section">
-            <h2>Results</h2>
-            <div id="krona-plot"></div>
-        </div>
+            <div class="section">
+                <button type="submit">Run analysis</button>
+            </div>
+
+            <div class="section results-placeholder">
+                <h2>Results</h2>
+                <p>The output report and Krona chart will appear here after submission.</p>
+            </div>
         </form>
     </div>
-
-    <!-- JavaScript functionality should be implemented in Flask backend using template logic and form handling -->
-
 </body>
 </html>

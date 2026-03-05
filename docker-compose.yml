@@ -5,8 +5,12 @@ services:
     build: ./web
     ports:
       - "8080:8080"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1 
     volumes:
       - shared_data:/data
+      - ./web:/app
     depends_on:
       - worker
       - redis

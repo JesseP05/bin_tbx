@@ -1,6 +1,9 @@
 # gitignore for pipeline
 
+# rm venvs
+/web/.venv/
 
+# kunnen wss wel weg later
 /virus_human_db
 /Krona
 install.sh

@@ -5,6 +5,9 @@ FROM python:3.11-slim
 RUN echo "bleep boop, starting webserver.."
 WORKDIR /app
 
+# geen pycache in container
+ENV PYTHONDONTWRITEBYTECODE=1
+
 # install requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

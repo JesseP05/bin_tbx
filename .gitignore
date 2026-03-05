@@ -2,6 +2,7 @@
 
 # rm venvs
 /web/.venv/
+/web/__pycache__/
 
 # kunnen wss wel weg later
 /virus_human_db

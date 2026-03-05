@@ -9,13 +9,23 @@ services:
       - shared_data:/data
     depends_on:
       - worker
+      - redis
 
   worker:
     build: ./worker
     volumes:
       - shared_data:/data
+      - kraken_db:/virology_db
+    depends_on:
+      - redis
     deploy:
       replicas: 1
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
 volumes:
-  shared_data
+  shared_data:
+  kraken_db:

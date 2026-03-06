@@ -2,13 +2,10 @@
 - [Bin Pipeline](#bin-pipeline)
   - [Inleiding](#inleiding)
   - [Hoofdvraag:](#hoofdvraag)
-    - [Tools:](#tools)
-    - [Requirements](#requirements)
+    - [Tools: TODO: uitleg](#tools-todo-uitleg)
+    - [Requirements (prolly remove cus Docker)](#requirements-prolly-remove-cus-docker)
 - [Installation Instructions](#installation-instructions)
-  - [FASTP](#fastp)
-  - [Kraken2](#kraken2)
-  - [Download de virology database voor kraken2](#download-de-virology-database-voor-kraken2)
-  - [kraken test run](#kraken-test-run)
+  - [Uninstalling](#uninstalling)
 
 
 ## Inleiding 
@@ -21,12 +18,12 @@ Voor de opdracht van BIN toolbox gaan we een website bouwen die en bio info pipe
 Waarom dit van belang is: Met de uitbraak van Covid-19 hebben we allemaal meegemaakt hoe belangrijk het is om vroegtijdig een diagnose te kunnen stellen. Deze tool zal een soort imitatie zijn van tools die bijvoorbeeld het RIVM bezit om virussen snel te classificeren en daarmee een positieve ofwel negatieve diagnose te stellen.
 
 
-### Tools:
-1. FASTP
+### Tools: TODO: uitleg
+1. FASTP 
 2. KRAKEN2 
 3. Krona (visualisatie)
 
-### Requirements
+### Requirements (prolly remove cus Docker)
 De tools FastP en Kraken2 hebben de volgende benodigheden: 
 * Linux (of WSL)
 * Python 3.x 
@@ -40,73 +37,49 @@ De tools FastP en Kraken2 hebben de volgende benodigheden:
 
 # Installation Instructions
 
-## FASTP
-FastP heeft een aantal requirements, installeer deze eerst:
-1. libdeflate
-> (sudo) apt install libdeflate-dev
-2. libisal
-> (sudo) apt install libisal-dev
-> (sudo) apt install isal
-3. buildtools (gcc)
-> sudo apt install build-essential
+Dit project runned geheel in Docker, waardoor er geen individuele dependencies naast Docker handmatig geinstalleerd hoeven te worden. Voor het installeren van Docker -- raadpleeg de volgende link: [Installatie instructies.](https://docs.docker.com/engine/install/)
 
-Hierna kan de binary van fastp gecompileerd en geinstalleerd worden:
+Nadat Docker geinstalleerd is, kunnen we doorgaan met de volgende stappen.
+
+Clone deze repo, of download de .zip van de repo naar een handige plaats.
 ```bash
-wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz
-tar -xf v1.1.0.tar.gz
-cd fastp-1.1.0/
-
-make -j
-sudo make install
-```
-fastp is nu geinstalleerd
-
-## Kraken2
-Kraken2 heeft een aantal requirements, installeer deze eerst:
-1. zlib
-> (sudo) apt install zlib1g-dev
-2. Krona
-```bash
-git clone https://github.com/marbl/Krona.git
-cd Krona/KronaTools
-sudo ./install.pl
-
-mkdir taxonomy && ./updateTaxonomy
+$ git clone https://github.com/JesseP05/bin_tbx.git
+$ cd bin_tbx
 ```
 
-Hierna kan de binary van Kraken2 gecompileerd en geinstalleerd worden:
+Nu we in de console in de folder zitten kunnen we Docker starten.
 ```bash
-wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz
-tar -xf v2.17.1.tar.gz
-
-cd kraken2-2.17.1/
-chmod +x install_kraken2.sh
-
-sudo ./install_kraken2.sh /usr/local/bin
+$ docker compose up --build
 ```
-kraken2 is nu geinstalleerd
+Dit kan even duren en voor de complete installatie is een internetverbinding nodig.
 
-## Download de virology database voor kraken2
-> GAAT VERANDEREN!
-Download locatie is willekeurig dmv symlink (e.g. ../viral_db)
-```bash
-mkdir viral_db && cd viral_db
-wget https://g-e320e6.63720f.75bc.data.globus.org/gen101/world-shared/doi-data/OLCF/202004/10.13139_OLCF_1615774/viral-jgi-krakendb-all.tar.gz
-tar -xf viral-jgi-krakendb-all.tar.gz
-
-cd viral-jgi-krakend-all
-
-sudo mkdir -p /usr/local/share/kraken2
-
-pwd
-sudo ln -s PWD_OUTPUT /virology_db
-
-rm viral-jgi-krakendb-all.tar.gz
+Wanneer de installatie klaar is de interface lokaal te vinden op:
+```json
+127.0.0.1:8080
 ```
+Hiermee is de installatie compleet en kunnen sequenties worden geupload.
 
-## kraken test run
-run dit command in een dir met bv een fasta bestand
+## Uninstalling
+Het verwijderen van de software wederom is eenvoudig dankzij Docker:
+
+Open een cli in de bin_tbx folder, en run de commandos:
 ```bash
-kraken2 --db /virology_db --threads 4 --report out.txt *.fasta
+$ docker compose down -v
+```
+Om de repo helemaal te verwijderen:
+```bash
+$ cd ..
+```
+Linux & MacOS
+```bash
+$ rm -rf bin_tbx
+```
+Windows
+```bash
+$ rmdir /s /q bin_tbx
 ```
 
+
+---
+
+Jesse Postma & Robin Offringa

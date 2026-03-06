@@ -54,7 +54,7 @@ $ docker compose up --build
 Dit kan even duren en voor de complete installatie is een internetverbinding nodig.
 
 Wanneer de installatie klaar is de interface lokaal te vinden op:
-```json
+```yaml
 127.0.0.1:8080
 ```
 Hiermee is de installatie compleet en kunnen sequenties worden geupload.

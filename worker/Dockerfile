@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libisal-dev \
     isal \
     build-essential \
-    zlib1g-dev \
+    zlib1g-dev
 
 # download en compileer fastp
 RUN wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz && \
@@ -23,7 +23,6 @@ RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz
     tar -xf v2.17.1.tar.gz && \
     cd kraken2-2.17.1 && \
     ./install_kraken2.sh /usr/local/bin
-
 
 # runtime image
 FROM python:3.11-slim

@@ -19,7 +19,7 @@ services:
     build: ./worker
     volumes:
       - shared_data:/data
-      - kraken_db:/virology_db
+      - kraken_db:/human_viral_db
     depends_on:
       - redis
     deploy:

@@ -56,3 +56,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENTRYPOINT ["bash", "entry.sh"]
+
+CMD ["python", "watcher.py"]

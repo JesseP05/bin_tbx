@@ -11,7 +11,7 @@ if [ -f "$DB_PATH/hash.k2d" ]; then
 else
     echo "Downloading Human/Viral db..."
     # wget quiet met progress bar out naar tmp dir
-    wget -q --show-progress -O /tmp/human_viral_db.tar.gz "$DB_DOWNLOAD"
+    wget --progress=dot:giga -O /tmp/human_viral_db.tar.gz "$DB_DOWNLOAD"
 
     echo "Extracting database..."
     # tar extract met copy naar db path

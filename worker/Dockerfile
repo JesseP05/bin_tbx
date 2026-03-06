@@ -44,7 +44,10 @@ RUN apt-get update && apt-get install -y \
     perl \
     git \
     wget \
-    bash
+    bash \
+    curl \
+    make \
+    build-essential
 
 # copy compiled files
 COPY --from=builder /usr/local/bin/fastp /usr/local/bin/fastp

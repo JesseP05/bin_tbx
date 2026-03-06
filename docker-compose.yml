@@ -26,6 +26,7 @@ services:
 
   redis:
     image: redis:alpine
+    command: redis-server --loglevel warning
     ports:
       - "6379:6379"
 

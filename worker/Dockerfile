@@ -10,19 +10,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libisal-dev \
     isal \
     build-essential \
-    zlib1g-dev
+    zlib1g-dev \
+    wget \
+    tar \
+    make \
+    perl && \
+    rm -rf /var/lib/apt/lists/*
 
 # download en compileer fastp
 RUN wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz && \
     tar -xf v1.1.0.tar.gz && \
-    cd fastp-1.1.0/ && \
-    make -j && make install
+    cd fastp-1.1.0 && \
+    make -j && make install && \
+    cd .. && \
+    rm -rf v1.1.0.tar.gz fastp-1.1.0
 
 # downlaod en compileer kraken2
 RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz && \
     tar -xf v2.17.1.tar.gz && \
     cd kraken2-2.17.1 && \
-    ./install_kraken2.sh /usr/local/bin
+    ./install_kraken2.sh /usr/local/bin && \
+    cd .. && \
+    rm -rf v2.17.1.tar.gz kraken2-2.17.1
 
 # runtime image
 FROM python:3.11-slim
@@ -37,7 +46,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     bash
 
-# copy builder files
+# copy compiled files
 COPY --from=builder /usr/local/bin/fastp /usr/local/bin/fastp
 COPY --from=builder /usr/local/bin/kraken2* /usr/local/bin/
 
@@ -54,6 +63,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# database downlaod
 ENTRYPOINT ["bash", "entry.sh"]
 
 CMD ["python", "watcher.py"]

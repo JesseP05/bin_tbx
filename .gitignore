@@ -1,6 +1,12 @@
 # gitignore for pipeline
 
+# rm venvs & cache
+/web/.venv/
+/web/__pycache__/
+/worker/.venv/
+/worker/__pycache__/
 
+# kunnen wss wel weg later
 /virus_human_db
 /Krona
 install.sh

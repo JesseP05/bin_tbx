@@ -7,61 +7,54 @@
     <link rel="stylesheet" href="../static/css/stylesheet.css">
 </head>
 <body>
-
     <div class="container">
         <h1>Project: Bin Pipeline</h1>
-        <p style="text-align: center; color: #666; margin-top: -20px; margin-bottom: 40px;">
-            Hoe wij een website bouwden om virussen in DNA te herkennen.
-        </p>
+        <p class="meta">Vak: BIN Toolbox | Projectgroep: Jesse en Robin | Versie: concept</p>
 
         <div class="section">
-            <h2>Wat hebben we gedaan?</h2>
-            <p>Voor het vak <strong>BIN toolbox</strong> hebben we een website gemaakt die ingewikkelde computerprogramma's (tools) voor biologie aanstuurt. Onze opdrachtgevers, Ronald W. en Peter K., wilden graag een interface die makkelijk te gebruiken is voor studenten en onderzoekers.</p>
-            
-            <div class="config-group" style="font-style: italic; border-left: 5px solid #007bff; padding: 20px;">
-                <p>“Onze hoofdvraag: Hoe kunnen we DNA-data van verschillende virussen snel herkennen en laten zien?”</p>
+            <h2>Doel van het project</h2>
+            <p>Voor het vak BIN Toolbox hebben we een eenvoudige webinterface gebouwd voor een virus-analyse pipeline. Het doel is dat gebruikers een FASTQ-bestand uploaden en daarna een duidelijk resultaat krijgen.</p>
+
+            <div class="note">
+                <p>Hoofdvraag: hoe kunnen we DNA-data van virussen snel herkennen en overzichtelijk tonen?</p>
             </div>
-            
-            <p>Dit is belangrijk omdat we door Covid-19 hebben gezien hoe cruciaal het is om snel te weten welk virus iemand heeft. Onze tool werkt een beetje zoals de systemen bij het RIVM.</p>
+
+            <p>Dit onderwerp is relevant omdat snelle herkenning van virussen belangrijk is voor onderzoek en monitoring.</p>
         </div>
 
-        
-
         <div class="section">
-            <h2>Welke tools hebben we gekozen?</h2>
-            <p>We hebben drie hoofdprogramma's gebruikt om de DNA-data te verwerken:</p>
+            <h2>Gebruikte tools</h2>
+            <p>In de pipeline gebruiken we drie onderdelen:</p>
             <div class="config-group">
                 <ul>
-                    <li><strong>FastP:</strong> Deze tool ruimt de data op. Het verwijdert foutjes uit de DNA-metingen zodat de resultaten betrouwbaar zijn.</li>
-                    <li><strong>Kraken2:</strong> Dit is de 'zoekmachine'. Het vergelijkt de DNA-stukjes razendsnel met een enorme database van bekende virussen.</li>
-                    <li><strong>Krona:</strong> Hiermee maken we een interactief taartdiagram, zodat je in één oogopslag ziet welke virussen er gevonden zijn.</li>
+                    <li><strong>fastp</strong> voor kwaliteitscontrole en trimming van reads.</li>
+                    <li><strong>Kraken2</strong> voor taxonomische classificatie op basis van een referentiedatabase.</li>
+                    <li><strong>Krona</strong> voor een interactieve weergave van de gevonden taxa.</li>
                 </ul>
             </div>
         </div>
 
         <div class="section">
-            <h2>Hoe we het hebben aangepakt</h2>
-            
-            <h3>Stap 1: De basis leggen</h3>
-            <p>We hebben gewerkt in <strong>Linux (via WSL)</strong>. Dit is nodig omdat de meeste biologie-software niet goed werkt op de standaard Windows. We moesten eerst hulp-bestanden (zoals <code>libisal</code>) installeren om de computer klaar te maken.</p>
+            <h2>Aanpak in het kort</h2>
 
-            <h3>Stap 2: Software installeren</h3>
-            <p>In plaats van een simpel installatieprogramma, hebben we de broncode van <strong>FastP</strong> en <strong>Kraken2</strong> zelf opgebouwd op de computer. Dit noemen we 'compileren'. Zo weten we zeker dat de software precies goed werkt voor ons systeem.</p>
-            
-            <h3>Stap 3: De virus-database</h3>
-            <p>Een scanner werkt niet zonder kennis. We hebben een database met virus-informatie gedownload. Om ruimte te besparen en het overzichtelijk te houden, hebben we deze met een slimme koppeling (een 'symlink') aan ons project verbonden.</p>
+            <h3>Stap 1</h3>
+            <p>Werkomgeving opgezet in Linux/WSL en benodigde packages geïnstalleerd.</p>
+
+            <h3>Stap 2</h3>
+            <p>fastp en Kraken2 geïnstalleerd en getest met voorbeeldbestanden.</p>
+
+            <h3>Stap 3</h3>
+            <p>Database gekoppeld en pipeline-output zichtbaar gemaakt in de webinterface.</p>
         </div>
-
-        
 
         <div class="section">
             <h2>Het resultaat</h2>
-            <p>We hebben nu een werkende pipeline. Als je een bestand met DNA-codes invoert, gaat de software aan de slag en krijg je een rapport terug waarin staat welk virus er in het monster zit.</p>
+            <p>Er staat nu een werkende basisversie: uploaden, verwerken en resultaten tonen in één flow.</p>
         </div>
 
-        <footer style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; color: #888;">
+        <footer>
             <p>Projectgroep: Jesse en Robin</p>
         </footer>
     </div>
-    </body>
+</body>
 </html>

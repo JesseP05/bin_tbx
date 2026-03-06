@@ -66,6 +66,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# blijkbaar is windows kut
+RUN apt-get update && apt-get install -y dos2unix && dos2unix entry.sh && \
+    chmod +x entry.sh
+
 # database downlaod
 ENTRYPOINT ["bash", "entry.sh"]
 

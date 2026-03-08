@@ -85,3 +85,25 @@ footer {
     border-top: 1px solid #eee;
     color: #888;
 }
+.navbar {
+    background-color: white;
+    border-bottom: 2px solid #007bff;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px 8px 0 0;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+.navbar a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+.navbar a:hover {
+    text-decoration: underline;
+}

@@ -6,7 +6,4 @@
 /worker/.venv/
 /worker/__pycache__/
 
-# kunnen wss wel weg later
-/virus_human_db
-/Krona
-install.sh
+.DS_Store

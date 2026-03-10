@@ -2,18 +2,18 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route("/")
-def index(title="Pipeline"):
-    return render_template('index.html')
+def index():
+    return render_template('index.html', title="Pipeline")
 
 
 @app.route("/about")
-def about(title="About"):
-    return render_template('about.html')
+def about():
+    return render_template('about.html', title="About")
 
 
 @app.route("/how-to")
-def usage(title="Usage Instructions"):
-    return render_template('usage.html')
+def usage():
+    return render_template('usage.html', title="How to use")
 
 
 if __name__ == "__main__":

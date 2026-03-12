@@ -6,10 +6,9 @@ app = Flask(__name__)
 def index():
     configurations = []
     if request.method == "POST":
-        # Checkbox: if checked, value is sent; if unchecked, .get() returns None
-        kraken_quick = "kraken-quick" in request.form
+        # temp spul
         kwargs = {
-            "kraken_quick": kraken_quick,
+            "kraken_quick": request.form.get("kraken-quick"),
             "kraken_confidence": request.form.get("kraken-confidence"),
             "kraken_threads": request.form.get("kraken-threads")
         }

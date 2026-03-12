@@ -1,6 +1,11 @@
+.config-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
 label {
     display: block;
-    margin: 8px 0;
     font-weight: bold;
 }
 
@@ -8,12 +13,25 @@ input,
 select {
     display: block;
     width: 100%;
-    max-width: 360px;
     padding: 8px;
     margin-top: 4px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+.advanced-options {
+    margin-top: 16px;
+}
+
+.advanced-options summary {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px 0;
+}
+
+.advanced-options .config-group {
+    margin-top: 12px;
 }
 
 button {
@@ -32,4 +50,42 @@ button:hover {
 
 .results-placeholder {
     margin-top: 24px;
+}
+
+.config-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor: help;
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: normal;
+}
+
+.config-tooltip:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.file-input{
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #666;
 }

@@ -16,7 +16,7 @@
                 <h2>Input Files</h2>
                 <label>
                     Upload FASTQ file
-                    <input type="file" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+                    <input type="file" class="file-input" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
                 </label>
             </div>
             <div class="section">
@@ -24,17 +24,22 @@
                 <div class="config-group">
                     <label>
                         Quality threshold
-                        <input type="number" name="fastp-q" value="15" min="0" max="40">
+                        <input type="number" name="fastp-quality" value="15" min="0" max="40">
                     </label>
 
                     <label>
                         Minimum length
-                        <input type="number" name="fastp-l" value="60" min="1">
+                        <input type="number" name="fastp-min-length" value="60" min="1">
+                    </label>
+
+                    <label>
+                        Maximum length
+                        <input type="number" name="fastp-length-max" value="0" min="0">
                     </label>
 
                     <label>
                         Threads
-                        <input type="number" name="fastp-thread" value="4" min="1">
+                        <input type="number" name="fastp-threads" value="4" min="1" max="16">
                     </label>
 
                     <label>
@@ -44,15 +49,101 @@
                             <option value="false">No</option>
                         </select>
                     </label>
+
+                    <!-- <label>
+                        Detect PE adapters
+                        <select name="fastp-detect-adapter-pe">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label> -->
+
+                    <label>
+                        Cut front (5')
+                        <select name="fastp-cut-front">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Cut tail (3')
+                        <select name="fastp-cut-tail">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Deduplication
+                        <select name="fastp-dedup">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Low complexity filter
+                        <select name="fastp-low-complexity">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
                 </div>
+
+                <details class="advanced-options">
+                    <summary>Advanced Options</summary>
+                    <div class="config-group">
+                        <label>
+                            N base limit
+                            <input type="number" name="fastp-n-base-limit" value="5" min="0">
+                        </label>
+
+                        <label>
+                            Unqualified percent limit
+                            <input type="number" name="fastp-unqualified-percent" value="40" min="0" max="100">
+                        </label>
+
+                        <label>
+                            Complexity threshold
+                            <input type="number" name="fastp-complexity-threshold" value="30" min="0" max="100">
+                        </label>
+
+                        <label>
+                            Cut window size
+                            <input type="number" name="fastp-cut-window-size" value="4" min="1">
+                        </label>
+
+                        <label>
+                            Cut mean quality
+                            <input type="number" name="fastp-cut-mean-quality" value="20" min="0" max="40">
+                        </label>
+
+                        <label>
+                            PolyG tail trimming
+                            <select name="fastp-trim-poly-g">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            PolyX tail trimming
+                            <select name="fastp-trim-poly-x">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+                    </div>
+                </details>
             </div>
 
             <div class="section">
                 <h2>Kraken2 Configuration</h2>
                 <div class="config-group">
                     <label>
-                        Quick mode
-                        <input type="checkbox" name="kraken-quick">
+                        Threads
+                        <input type="number" name="kraken-threads" value="4" min="1">
                     </label>
 
                     <label>
@@ -61,10 +152,95 @@
                     </label>
 
                     <label>
-                        Threads
-                        <input type="number" name="kraken-threads" value="4" min="1">
+                        Minimum base quality
+                        <input type="number" name="kraken-base-quality" value="0" min="0">
+                    </label>
+
+                    <label>
+                        Minimum hit groups
+                        <input type="number" name="kraken-hit-groups" value="2" min="1">
+                    </label>
+
+                    <label>
+                        Paired reads
+                        <select name="kraken-paired">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Use scientific names
+                        <select name="kraken-use-names">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Save unclassified sequences
+                        <select name="kraken-unclassified-out">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Save classified sequences
+                        <select name="kraken-classified-out">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
                     </label>
                 </div>
+
+                <details class="advanced-options">
+                    <summary>Advanced Options</summary>
+                    <div class="config-group">
+                        <label>
+                            Quick mode
+                            <select name="kraken-quick">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Use MPA style report
+                            <select name="kraken-mpa-style">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Report zero counts
+                            <select name="kraken-report-zero-counts">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Report minimizer data
+                            <select name="kraken-report-minimizer-data">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            <span class="config-tooltip">
+                                Use memory mapping
+                                <span class="tooltip">Avoids loading the entire database into memory</span>
+                            </span>
+                            <select name="kraken-memory-mapping">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </label>
+                    </div>
+                </details>
             </div>
 
             <div class="section">

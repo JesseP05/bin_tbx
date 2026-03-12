@@ -82,6 +82,12 @@ button:hover {
     opacity: 1;
 }
 
+.config-tooltip:focus-within .tooltip,
+.config-tooltip:focus .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
 .file-input{
     border: 2px dashed #ccc;
     padding: 20px;

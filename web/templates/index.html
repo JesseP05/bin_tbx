@@ -11,7 +11,7 @@
         <h1>FASTQ Analysis Pipeline</h1>
         <p class="meta">Course: BIN Toolbox | Team: Jesse & Robin</p>
 
-        <form method="POST" action="/">
+        <form method="POST" action="/" enctype="multipart/form-data">
             <div class="section">
                 <h2>Input Files</h2>
                 <label>
@@ -50,6 +50,7 @@
                         </select>
                     </label>
 
+                    <!-- TODO: Will be refined later -->
                     <!-- <label>
                         Detect PE adapters
                         <select name="fastp-detect-adapter-pe">

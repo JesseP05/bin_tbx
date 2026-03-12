@@ -6,12 +6,10 @@ app = Flask(__name__)
 def index():
     configurations = []
     if request.method == "POST":
-        # Checkbox: if checked, value is sent; if unchecked, .get() returns None
-        kraken_quick = "kraken-quick" in request.form
         kwargs = {
-            "kraken_quick": kraken_quick,
-            "kraken_confidence": request.form.get("kraken-confidence"),
-            "kraken_threads": request.form.get("kraken-threads")
+            "kraken_quick": request.form.get("kraken-quick", type=bool),
+            "kraken_confidence": request.form.get("kraken-confidence", type=float),
+            "kraken_threads": request.form.get("kraken-threads", type=int),
         }
         configurations = [f"{key}: {value}" for key, value in kwargs.items()]
     return render_template('index.html', title="Pipeline", configurations=configurations)

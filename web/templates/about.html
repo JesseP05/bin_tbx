@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project: Virus Scanner Pipeline</title>
-    <link rel="stylesheet" href="../static/css/shared.css">
-    <link rel="stylesheet" href="../static/css/about.css">
-</head>
-<body>
-    <nav class="navbar">
-        <ul>
-            <li><a href="/">Pipeline</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/how-to">Usage Instructions</a></li>
-        </ul>
-    </nav>
-    <div class="container">
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="../static/css/about.css">
+{% endblock %}
+
+{% block title %}Project: Virus Scanner Pipeline{% endblock %}
+
+{% block content %}
         <h1>Project: Bin Pipeline</h1>
         <p class="meta">Vak: BIN Toolbox | Projectgroep: Jesse en Robin | Versie: concept</p>
 
@@ -63,6 +55,4 @@
         <footer>
             <p>Projectgroep: Jesse en Robin</p>
         </footer>
-    </div>
-</body>
-</html>
+{% endblock %}

@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FASTQ Analysis Pipeline</title>
-    <link rel="stylesheet" href="../static/css/shared.css">
-    <link rel="stylesheet" href="../static/css/index.css">
-</head>
-<body>
-    <nav class="navbar">
-        <ul>
-            <li><a href="/">Pipeline</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/how-to">Usage Instructions</a></li>
-        </ul>
-    </nav>
-    <div class="container">
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="../static/css/index.css">
+{% endblock %}
+
+{% block title %}FASTQ Analysis Pipeline{% endblock %}
+
+{% block content %}
         <h1>FASTQ Analysis Pipeline</h1>
         <p class="meta">Course: BIN Toolbox | Team: Jesse & Robin</p>
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" action="/">
             <div class="section">
                 <h2>Input Files</h2>
                 <label>
@@ -59,12 +51,8 @@
                 <h2>Kraken2 Configuration</h2>
                 <div class="config-group">
                     <label>
-                        Database
-                        <select name="kraken-db">
-                            <option value="standard">Standard</option>
-                            <option value="standard-8gb">Standard-8GB</option>
-                            <option value="viral">Viral</option>
-                        </select>
+                        Quick mode
+                        <input type="checkbox" name="kraken-quick">
                     </label>
 
                     <label>
@@ -74,7 +62,7 @@
 
                     <label>
                         Threads
-                        <input type="number" name="kraken-thread" value="4" min="1">
+                        <input type="number" name="kraken-threads" value="4" min="1">
                     </label>
                 </div>
             </div>
@@ -85,9 +73,13 @@
 
             <div class="section results-placeholder">
                 <h2>Results</h2>
-                <p>The output report and Krona chart will appear here after submission.</p>
+                {% if configurations %}
+                <ul>
+                    {% for config in configurations %}
+                    <li>{{ config }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
         </form>
-    </div>
-</body>
-</html>
+{% endblock %}

@@ -1,9 +1,20 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 app = Flask(__name__)
 
-@app.route("/")
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template('index.html', title="Pipeline")
+    configurations = []
+    if request.method == "POST":
+        # Checkbox: if checked, value is sent; if unchecked, .get() returns None
+        kraken_quick = "kraken-quick" in request.form
+        kwargs = {
+            "kraken_quick": kraken_quick,
+            "kraken_confidence": request.form.get("kraken-confidence"),
+            "kraken_threads": request.form.get("kraken-threads")
+        }
+        configurations = [f"{key}: {value}" for key, value in kwargs.items()]
+    return render_template('index.html', title="Pipeline", configurations=configurations)
 
 
 @app.route("/about")

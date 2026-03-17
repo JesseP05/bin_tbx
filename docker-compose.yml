@@ -12,23 +12,14 @@ services:
       - ./web:/app
     depends_on:
       - worker
-      - redis
 
   worker:
     build: ./worker
     volumes:
       - shared_data:/data
       - kraken_db:/human_viral_db
-    depends_on:
-      - redis
     deploy:
       replicas: 1
-
-  redis:
-    image: redis:alpine
-    command: redis-server --loglevel warning
-    ports:
-      - "6379:6379"
 
 volumes:
   shared_data:

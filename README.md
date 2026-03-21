@@ -3,7 +3,7 @@
   - [Inleiding](#inleiding)
   - [Hoofdvraag:](#hoofdvraag)
     - [Tools: TODO: uitleg](#tools-todo-uitleg)
-    - [Requirements (prolly remove cus Docker)](#requirements-prolly-remove-cus-docker)
+    - [Requirements](#requirements)
 - [Installation Instructions](#installation-instructions)
   - [Uninstalling](#uninstalling)
 
@@ -23,16 +23,10 @@ Waarom dit van belang is: Met de uitbraak van Covid-19 hebben we allemaal meegem
 2. KRAKEN2 
 3. Krona (visualisatie)
 
-### Requirements (prolly remove cus Docker)
-De tools FastP en Kraken2 hebben de volgende benodigheden: 
-* Linux (of WSL)
-* Python 3.x 
-* isa-l 	(apt install libisal-dev, sudo apt install isal) 
-* libdeflate 	(apt install libdeflate-dev libdeflate0) 
-* Buildtools	(apt install build-essential) 
-* Zlib (apt install zlib1g-dev) 
-* Krona (apt install krona) 
-* Flask 
+### Requirements
+* Docker compatible OS
+* Python 3.x
+* Docker
  
 
 # Installation Instructions

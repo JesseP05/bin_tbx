@@ -20,20 +20,6 @@ select {
     box-sizing: border-box;
 }
 
-.advanced-options {
-    margin-top: 16px;
-}
-
-.advanced-options summary {
-    cursor: pointer;
-    font-weight: bold;
-    padding: 8px 0;
-}
-
-.advanced-options .config-group {
-    margin-top: 12px;
-}
-
 button {
     background-color: #007bff;
     color: white;

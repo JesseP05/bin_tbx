@@ -33,6 +33,17 @@
 
             <label>
                 <span class="config-tooltip" tabindex="0">
+                    Trim adapters
+                    <span class="tooltip">Verwijdert adapter-sequenties die tijdens sequencing zijn meegekomen.</span>
+                </span>
+                <select name="fastp-adapter">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </label>
+
+            <label>
+                <span class="config-tooltip" tabindex="0">
                     Minimum length
                     <span class="tooltip">Reads die te kort worden na trimming worden verwijderd.</span>
                 </span>
@@ -46,34 +57,6 @@
                 </span>
                 <input type="number" name="fastp-length-max" value="0" min="0">
             </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Threads
-                    <span class="tooltip">Aantal CPU-kernen dat fastp mag gebruiken.</span>
-                </span>
-                <input type="number" name="fastp-threads" value="4" min="1" max="16">
-            </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Trim adapters
-                    <span class="tooltip">Verwijdert adapter-sequenties die tijdens sequencing zijn meegekomen.</span>
-                </span>
-                <select name="fastp-adapter">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </label>
-
-            <!-- TODO: Will be refined later -->
-            <!-- <label>
-                Detect PE adapters
-                <select name="fastp-detect-adapter-pe">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                </select>
-            </label> -->
 
             <label>
                 <span class="config-tooltip" tabindex="0">
@@ -107,85 +90,7 @@
                     <option value="true">Yes</option>
                 </select>
             </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Low complexity filter
-                    <span class="tooltip">Verwijdert reads die bijna alleen uit herhalingen bestaan.</span>
-                </span>
-                <select name="fastp-low-complexity">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                </select>
-            </label>
         </div>
-
-        <details class="advanced-options">
-            <summary>Advanced Options</summary>
-            <div class="config-group">
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        N base limit
-                        <span class="tooltip">Limiet voor onbekende bases (N) in een read.</span>
-                    </span>
-                    <input type="number" name="fastp-n-base-limit" value="5" min="0">
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Unqualified percent limit
-                        <span class="tooltip">Maximaal percentage lage kwaliteit bases in een read.</span>
-                    </span>
-                    <input type="number" name="fastp-unqualified-percent" value="40" min="0" max="100">
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Complexity threshold
-                        <span class="tooltip">Filtert reads met te weinig variatie.</span>
-                    </span>
-                    <input type="number" name="fastp-complexity-threshold" value="30" min="0" max="100">
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Cut window size
-                        <span class="tooltip">Grootte van het venster voor kwaliteitsknippen.</span>
-                    </span>
-                    <input type="number" name="fastp-cut-window-size" value="4" min="1">
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Cut mean quality
-                        <span class="tooltip">Minimale gemiddelde kwaliteit voor knippen.</span>
-                    </span>
-                    <input type="number" name="fastp-cut-mean-quality" value="20" min="0" max="40">
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        PolyG tail trimming
-                        <span class="tooltip">Verwijdert poly-G staarten van Illumina reads.</span>
-                    </span>
-                    <select name="fastp-trim-poly-g">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        PolyX tail trimming
-                        <span class="tooltip">Verwijdert poly-X staarten (AAAA, TTTT, etc.).</span>
-                    </span>
-                    <select name="fastp-trim-poly-x">
-                        <option value="false">No</option>
-                        <option value="true">Yes</option>
-                    </select>
-                </label>
-            </div>
-        </details>
     </div>
 
     <div class="section">
@@ -193,34 +98,10 @@
         <div class="config-group">
             <label>
                 <span class="config-tooltip" tabindex="0">
-                    Threads
-                    <span class="tooltip">Aantal CPU-kernen dat Kraken2 mag gebruiken.</span>
-                </span>
-                <input type="number" name="kraken-threads" value="4" min="1">
-            </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
                     Confidence threshold
                     <span class="tooltip">Minimale zekerheid voor taxon-toewijzing.</span>
                 </span>
                 <input type="number" name="kraken-confidence" value="0.0" min="0" max="1" step="0.01">
-            </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Minimum base quality
-                    <span class="tooltip">Bases met lage kwaliteit worden genegeerd.</span>
-                </span>
-                <input type="number" name="kraken-base-quality" value="0" min="0">
-            </label>
-
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Minimum hit groups
-                    <span class="tooltip">Minimale aantal overeenkomsten voor taxon-toewijzing.</span>
-                </span>
-                <input type="number" name="kraken-hit-groups" value="2" min="1">
             </label>
 
             <label>
@@ -247,86 +128,13 @@
 
             <label>
                 <span class="config-tooltip" tabindex="0">
-                    Save unclassified sequences
-                    <span class="tooltip">Slaat reads op die niet geclassificeerd konden worden.</span>
+                    Minimum base quality
+                    <span class="tooltip">Bases met lage kwaliteit worden genegeerd.</span>
                 </span>
-                <select name="kraken-unclassified-out">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                <input type="number" name="kraken-base-quality" value="0" min="0">
             </label>
 
-            <label>
-                <span class="config-tooltip" tabindex="0">
-                    Save classified sequences
-                    <span class="tooltip">Slaat reads op die geclassificeerd zijn.</span>
-                </span>
-                <select name="kraken-classified-out">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </label>
         </div>
-
-        <details class="advanced-options">
-            <summary>Advanced Options</summary>
-            <div class="config-group">
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Quick mode
-                        <span class="tooltip">Snellere modus, stopt eerder bij duidelijke match.</span>
-                    </span>
-                    <select name="kraken-quick">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Use MPA style report
-                        <span class="tooltip">Geeft output in MPA-achtig formaat.</span>
-                    </span>
-                    <select name="kraken-mpa-style">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Report zero counts
-                        <span class="tooltip">Laat organismen zien waarvoor geen reads zijn gevonden.</span>
-                    </span>
-                    <select name="kraken-report-zero-counts">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Report minimizer data
-                        <span class="tooltip">Toont aanvullende info over minimizers in de database.</span>
-                    </span>
-                    <select name="kraken-report-minimizer-data">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </label>
-
-                <label>
-                    <span class="config-tooltip" tabindex="0">
-                        Use memory mapping
-                        <span class="tooltip">Vermijdt het laden van de volledige database in RAM.</span>
-                    </span>
-                    <select name="kraken-memory-mapping">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </label>
-            </div>
-        </details>
     </div>
 
     <div class="section">

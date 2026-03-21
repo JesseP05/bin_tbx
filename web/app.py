@@ -4,15 +4,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    configurations = []
-    if request.method == "POST":
-        kwargs = {
-            "kraken_quick": request.form.get("kraken-quick", type=bool),
-            "kraken_confidence": request.form.get("kraken-confidence", type=float),
-            "kraken_threads": request.form.get("kraken-threads", type=int),
-        }
-        configurations = [f"{key}: {value}" for key, value in kwargs.items()]
-    return render_template('index.html', title="Pipeline", configurations=configurations)
+    return render_template('index.html', title="Pipeline")
 
 
 @app.route("/about")

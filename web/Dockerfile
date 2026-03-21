@@ -9,14 +9,12 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # install requirements
-COPY requirements.txt .
+COPY web/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy shared code
-COPY ../shared ./shared
-
-# flask naar container
-COPY . .
+# copy shared code and flask app
+COPY shared ./shared
+COPY web/. .
 
 EXPOSE 8080
 

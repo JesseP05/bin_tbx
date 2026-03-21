@@ -13,43 +13,60 @@
 
         <div class="section">
             <h2>Doel van het project</h2>
-            <p>Voor het vak BIN Toolbox hebben we een eenvoudige webinterface gebouwd voor een virus-analyse pipeline. Het doel is dat gebruikers een FASTQ-bestand uploaden en daarna een duidelijk resultaat krijgen.</p>
+            <p>Voor de opdracht van BIN Toolbox hebben wij een website gebouwd die een bio-informatica pipeline aanstuurt. De opdrachtgevers hebben ons gevraagd een interactieve interface te maken waarmee verschillende bio-informatica tools kunnen worden gebruikt.</p>
 
-            <div class="note">
-                <p>Hoofdvraag: hoe kunnen we DNA-data van virussen snel herkennen en overzichtelijk tonen?</p>
+            <p>Wij mochten zelf kiezen welke tools we gebruiken. We hebben gekozen voor FastP en Kraken2 om onze hoofdvraag te beantwoorden: hoe kunnen we DNA-data van virussen snel herkennen en overzichtelijk tonen?</p>
+
+            <p>Daarnaast is het belangrijk dat de tools tussentijdse rapporten geven over de kwaliteit van de DNA-bestanden die de gebruiker uploadt. Zo weet de gebruiker altijd hoe goed de data is voordat de analyse verder gaat.</p>
+        </div>
+
+        <div class="section">
+            <h2>Waarom dit project?</h2>
+            <p>Snelle herkenning van virussen is belangrijk. Tijdens de uitbraak van Covid-19 zagen we hoe belangrijk het is om snel een diagnose te kunnen stellen. Deze tool laat zien hoe een pipeline die virussen herkent can werken.</p>
+
+            <p>De pipeline is een simpele versie van systemen die bijvoorbeeld het RIVM gebruikt. Met deze website leren wij hoe DNA-data geanalyseerd kan worden en hoe de resultaten duidelijk kunnen worden weergegeven voor de gebruiker.</p>
+        </div>
+
+        <div class="section">
+            <h2>Voor wie is de pipeline?</h2>
+            <p>De pipeline is bedoeld voor:</p>
+            <div class="config-group">
+                <ul>
+                    <li>Studenten die willen leren hoe bio-informatica pipelines werken.</li>
+                    <li>Mensen die interesse hebben in DNA en sequencing.</li>
+                    <li>Onderzoekers die snel een eerste indruk van hun data willen hebben.</li>
+                </ul>
             </div>
 
-            <p>Dit onderwerp is relevant omdat snelle herkenning van virussen belangrijk is voor onderzoek en monitoring.</p>
+            <p>De interface is eenvoudig zodat iedereen de resultaten kan begrijpen zonder veel voorkennis.</p>
         </div>
 
         <div class="section">
             <h2>Gebruikte tools</h2>
-            <p>In de pipeline gebruiken we drie onderdelen:</p>
+            <p>De pipeline gebruikt drie tools:</p>
             <div class="config-group">
                 <ul>
-                    <li><strong>fastp</strong> voor kwaliteitscontrole en trimming van reads.</li>
-                    <li><strong>Kraken2</strong> voor taxonomische classificatie op basis van een referentiedatabase.</li>
-                    <li><strong>Krona</strong> voor een interactieve weergave van de gevonden taxa.</li>
+                    <li><strong>FastP:</strong> controleert de kwaliteit van de DNA-sequenties, filtert slechte stukken en trimt waar nodig. Maakt een tussentijds rapport over de kwaliteit van de data.</li>
+                    <li><strong>Kraken2:</strong> vergelijkt DNA-stukjes met een database en bepaalt van welk virus of organisme ze zijn. Zo krijgen we een overzicht van wat aanwezig is in de data.</li>
+                    <li><strong>Krona:</strong> maakt een cirkeldiagram van de Kraken2-resultaten zodat het makkelijk te zien is welke virussen aanwezig zijn en in welke verhouding.</li>
                 </ul>
             </div>
+
+            <p>Deze tools samen zorgen ervoor dat de gebruiker zowel de kwaliteit als de inhoud van de data goed kan bekijken.</p>
         </div>
 
         <div class="section">
-            <h2>Aanpak in het kort</h2>
+            <h2>Hoe werkt de pipeline?</h2>
+            <p>De pipeline werkt zo:</p>
 
-            <h3>Stap 1</h3>
-            <p>Werkomgeving opgezet in Linux/WSL en benodigde packages geïnstalleerd.</p>
+            <h3>Stap 1 – FastP</h3>
+            <p>De gebruiker uploadt een FASTQ-bestand. FastP checkt eerst de kwaliteit van de sequenties en verwijdert slechte stukken. Daarna wordt een rapport gemaakt dat direct op de website te zien is.</p>
 
-            <h3>Stap 2</h3>
-            <p>fastp en Kraken2 geïnstalleerd en getest met voorbeeldbestanden.</p>
+            <h3>Stap 2 – Kraken2</h3>
+            <p>Het tussentijdse rapport en de schone data worden naar Kraken2 gestuurd. Kraken2 vergelijkt korte DNA-stukjes met een database van bekende organismen en klassificeert welke virussen er aanwezig zijn.</p>
 
-            <h3>Stap 3</h3>
-            <p>Database gekoppeld en pipeline-output zichtbaar gemaakt in de webinterface.</p>
-        </div>
-
-        <div class="section">
-            <h2>Het resultaat</h2>
-            <p>Er staat nu een werkende basisversie: uploaden, verwerken en resultaten tonen in één flow.</p>
+            <h3>Stap 3 – Krona</h3>
+            <p>De resultaten van Kraken2 worden weergegeven in een cirkeldiagram met Krona. Zo kan de gebruiker makkelijk zien welke virussen aanwezig zijn en hoeveel van elk.</p>
         </div>
 
         <footer>

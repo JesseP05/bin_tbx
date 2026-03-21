@@ -61,6 +61,10 @@ RUN git clone https://github.com/marbl/Krona.git /opt/Krona && \
 
 # python dependencies for watcher
 WORKDIR /app
+
+# copy shared clsses
+COPY ../shared ./shared
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 

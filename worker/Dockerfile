@@ -62,13 +62,12 @@ RUN git clone https://github.com/marbl/Krona.git /opt/Krona && \
 # python dependencies for watcher
 WORKDIR /app
 
-# copy shared clsses
-COPY ../shared ./shared
-
-COPY requirements.txt .
+COPY worker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# copy shared code and worker
+COPY shared ./shared
+COPY worker/. .
 
 # blijkbaar is windows kut
 RUN apt-get update && apt-get install -y dos2unix && dos2unix entry.sh && \

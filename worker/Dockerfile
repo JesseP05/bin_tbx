@@ -29,15 +29,15 @@ RUN wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz && \
 RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz && \
     tar -xf v2.17.1.tar.gz && \
     cd kraken2-2.17.1 && \
-    ./install_kraken2.sh /usr/local/bin && \
+    ./install_kraken2.sh /opt/kraken2 && \
     cd .. && \
     rm -rf v2.17.1.tar.gz kraken2-2.17.1
 
 # runtime image
 FROM python:3.11-slim
 
-# dependencies weer nodig
-RUN apt-get update && apt-get install -y \
+# weer dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libdeflate0 \
     libisal2 \
     zlib1g \
@@ -47,30 +47,43 @@ RUN apt-get update && apt-get install -y \
     bash \
     curl \
     make \
-    build-essential
+    build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
-# copy compiled files
+# copy compiled binaary
 COPY --from=builder /usr/local/bin/fastp /usr/local/bin/fastp
-COPY --from=builder /usr/local/bin/kraken2* /usr/local/bin/
+COPY --from=builder /opt/kraken2 /opt/kraken2
 
-# Krona install
-RUN git clone https://github.com/marbl/Krona.git /opt/Krona && \
+ENV PATH="/opt/kraken2/bin:/opt/kraken2:$PATH"
+
+# Krona install met optimize
+RUN apt-get update && apt-get install -y --no-install-recommends git && \
+    git clone --depth 1 https://github.com/marbl/Krona.git /opt/Krona && \
     cd /opt/Krona/KronaTools && \
     ./install.pl && \
-    mkdir taxonomy && ./updateTaxonomy.sh taxonomy
+    mkdir taxonomy && \
+    ./updateTaxonomy.sh taxonomy && \
+    rm -rf /opt/Krona/.git && \
+    apt-get remove -y git && \
+    rm -rf /var/lib/apt/lists/*
 
-# python dependencies for watcher
+# python dependencies install for watcher
 WORKDIR /app
-COPY requirements.txt .
+
+COPY worker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY shared/ ./shared/
+COPY worker/*.py ./
+COPY worker/entry.sh ./
 
-# blijkbaar is windows kut
-RUN apt-get update && apt-get install -y dos2unix && dos2unix entry.sh && \
-    chmod +x entry.sh
+# convert line endings
+RUN apt-get update && apt-get install -y --no-install-recommends dos2unix && \
+    dos2unix entry.sh && \
+    chmod +x entry.sh && \
+    rm -rf /var/lib/apt/lists/*
 
-# database downlaod
+# database downloadd
 ENTRYPOINT ["bash", "entry.sh"]
 
-CMD ["python", "watcher.py"]
+CMD ["python", "-u", "watcher.py"]

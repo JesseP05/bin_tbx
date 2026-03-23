@@ -1,9 +1,11 @@
 # gitignore for pipeline
 
 # rm venvs & cache
-/web/.venv/
-/web/__pycache__/
-/worker/.venv/
-/worker/__pycache__/
-
+.venv/
 .DS_Store
+__pycache__/
+venv/
+
+# ignore test files
+shared/data/
+test/

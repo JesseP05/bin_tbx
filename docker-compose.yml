@@ -1,26 +1,32 @@
 
 services:
   web:
-    build: ./web
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
     ports:
       - "8080:8080"
     environment:
       - FLASK_APP=app.py
       - FLASK_DEBUG=1 
     volumes:
-      - shared_data:/data
+      - shared:/data
       - ./web:/app
+      - ./shared:/app/shared
     depends_on:
       - worker
 
   worker:
-    build: ./worker
+    build:
+      context: .
+      dockerfile: ./worker/Dockerfile
     volumes:
-      - shared_data:/data
+      - shared:/data
       - kraken_db:/human_viral_db
     deploy:
       replicas: 1
+    cpus: 8
 
 volumes:
-  shared_data:
+  shared:
   kraken_db:

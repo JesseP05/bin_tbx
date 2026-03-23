@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block head %}
-{{ super() }}
+{{ super() }} 
+<!-- super is zodat de head van de base.html niet wordt overschreven -->
 <link rel="stylesheet" href="../static/css/index.css">
+<script src="../static/js/script.js"></script>
 {% endblock %}
 
 {% block title %}FASTQ Analysis Pipeline{% endblock %}
@@ -141,15 +143,18 @@
         <button type="submit">Run analysis</button>
     </div>
 
-    <div class="section results-placeholder">
+    <div id="results-container" data-job-id="{{ current_job }}">
         <h2>Results</h2>
-        {% if configurations %}
-        <ul>
-            {% for config in configurations %}
-            <li>{{ config }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <div class="results-grid">
+            <div class="result-item">
+                <h3>fastp Report</h3>
+                <iframe id="fastp-result" src=""></iframe>
+            </div>
+            <div class="result-item">
+                <h3>Krona Report</h3>
+                <iframe id="kraken-result" src=""></iframe>
+            </div>
+        </div>
     </div>
 </form>
 {% endblock %}

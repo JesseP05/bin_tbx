@@ -5,14 +5,10 @@ import time
 import os
 import logging
 from flask import Flask, render_template, request, jsonify, send_file
-#from shared.models import Job
+from shared.models import Job
 
 
 app = Flask(__name__)
-
-# geen vervelende fetch logs van js
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
 
 
 @app.route("/", methods=["GET", "POST"])

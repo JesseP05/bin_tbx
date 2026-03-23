@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const jobId = resultGrid.dataset.jobId;
     if (jobId && jobId !== 'None') {
-        setTimeout(() => getJobStatus(jobId), 4000);
+        fetchTimeout = setTimeout(() => getJobStatus(jobId), 4000);
     }
 });
 
@@ -15,9 +15,13 @@ function getJobStatus(id) {
         .then(res => res.json())
         .then(data => {
             if (data.status === "completed") {
-                showResults(data);
+		if (fetchTimeout){
+			clearTimeout(fetchTimeout);
+			fetchTimeout = null;
+		}
+		showResults(data)
             } else if (data.status === "processing" || data.status === "pending") {
-                setTimeout(() => getJobStatus(id), 2000);
+                fetchTimeout = setTimeout(() => getJobStatus(id), 2000);
             }
         })
         .catch(err => console.error("Error polling status:", err));

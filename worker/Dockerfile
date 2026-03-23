@@ -70,8 +70,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && \
 # python dependencies install for watcher
 WORKDIR /app
 
-COPY worker/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+#COPY worker/requirements.txt .
+#RUN pip install --no-cache-dir -r requirements.txt
 
 COPY shared/ ./shared/
 COPY worker/*.py ./

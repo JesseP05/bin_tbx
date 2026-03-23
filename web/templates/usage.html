@@ -8,6 +8,63 @@
 {% block title %}Usage instructions{% endblock %}
 
 {% block content %}
-        <h1>How to use the pipeline.</h1>
-        <p class="meta">Course: BIN Toolbox | Team: Jesse & Robin</p>
+
+<h1>Hoe gebruik je de pipeline?</h1>
+<p class="meta">Course: BIN Toolbox | Team: Jesse & Robin</p>
+
+<div class="section">
+    <p>
+    Deze website is gemaakt om FASTQ-bestanden te analyseren.
+    De pipeline werkt in twee stappen: eerst worden de reads opgeschoond met fastp,
+    daarna worden ze geanalyseerd met Kraken2 om te bepalen van welke organismen ze
+    afkomstig zijn.
+    </p>
+</div>
+
+<div class="section">
+    <h2>1. FASTQ-bestand uploaden</h2>
+    <p>
+    Bovenaan de pagina upload je een FASTQ-bestand. Dit bestand bevat de ruwe reads
+    die gebruikt worden in de analyse. Nadat je een bestand hebt gekozen, gebruikt
+    de pipeline dit bestand voor alle volgende stappen.
+    </p>
+</div>
+
+<div class="section">
+    <h2>2. fastp configuratie</h2>
+    <p>
+    In dit gedeelte stel je in hoe de reads worden aangepast voordat ze verder
+    worden gebruikt.
+    </p>
+
+    <div class="config-group">
+        <p>Quality threshold geeft aan welke basekwaliteit minimaal nodig is.</p>
+        <p>Trim adapters verwijdert adaptersequenties uit de reads.</p>
+        <p>Minimum length bepaalt hoe kort een read mag zijn.</p>
+        <p>Maximum length bepaalt hoe lang een read mag zijn.</p>
+        <p>Cut front verwijdert bases aan het begin van de read.</p>
+        <p>Cut tail verwijdert bases aan het einde van de read.</p>
+        <p>Deduplication verwijdert identieke reads en staat standaard uit.</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. Kraken2 configuratie</h2>
+
+    <div class="config-group">
+        <p>Confidence threshold bepaalt wanneer een read wordt toegewezen.</p>
+        <p>Paired reads gebruik je bij paired-end data.</p>
+        <p>Use scientific names toont wetenschappelijke namen.</p>
+        <p>Minimum base quality bepaalt welke bases worden gebruikt.</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. Analyse uitvoeren</h2>
+    <p>
+    Klik op Run analysis om de pipeline te starten.
+    Hoe lang dit duurt hangt af van het bestand en de instellingen.
+    </p>
+</div>
+
 {% endblock %}

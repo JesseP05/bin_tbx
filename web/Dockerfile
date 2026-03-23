@@ -13,8 +13,10 @@ COPY web/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy shared code and flask app
-COPY shared ./shared
-COPY web/. .
+COPY shared/ ./shared/
+COPY web/app.py ./
+COPY web/templates/ ./templates/
+COPY web/static/ ./static/
 
 EXPOSE 8080
 

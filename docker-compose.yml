@@ -25,6 +25,7 @@ services:
       - kraken_db:/human_viral_db
     deploy:
       replicas: 1
+    cpus: 8
 
 volumes:
   shared:

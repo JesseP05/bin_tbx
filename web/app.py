@@ -3,11 +3,16 @@
 import json
 import time
 import os
-from flask import Flask, render_template, request, jsonify
-from shared.models import Job
+import logging
+from flask import Flask, render_template, request, jsonify, send_file
+#from shared.models import Job
 
 
 app = Flask(__name__)
+
+# geen vervelende fetch logs van js
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -18,7 +23,7 @@ def index():
         fastq_file = request.files.get('fastq-file') or None
         fastq_name = fastq_file.name
 
-        job_dir = f"shared/data/{job_id}"
+        job_dir = f"/data/{job_id}"
         os.makedirs(job_dir, exist_ok=True)
         
         fastq_path = f"{job_dir}/{fastq_name}.fastq"
@@ -43,7 +48,7 @@ def index():
 
         fastp = Job.FastP(**fastp_kwargs)
         kraken = Job.Kraken(**kraken_kwargs)
-        job = Job(job_id, fastq_path, "pending", fastp=fastp, kraken=kraken)
+        job = Job(job_id, fastq_filename=fastq_path, filepath=job_dir, status="pending", fastp=fastp, kraken=kraken)
         job.create_commands()
         job.save()
         return render_template('index.html', title="Pipeline", current_job=job_id)
@@ -63,7 +68,7 @@ def usage():
 
 @app.route("/job/<job_id>/status")
 def get_job_status(job_id):
-    job_dir = f"shared/data/{job_id}"
+    job_dir = f"/data/{job_id}"
     results_file = f"{job_dir}/{job_id}_results.json"
     job_file = f"{job_dir}/{job_id}_job.json"
     
@@ -77,6 +82,21 @@ def get_job_status(job_id):
             return jsonify({"job_id": job_id, "status": data["status"]})
     
     return jsonify({"error": "Job not found"}), 404
+
+
+@app.route("/data/<path:filepath>")
+def serve_data(filepath):
+    data_dir = "/data"
+    full_path = os.path.join(data_dir, filepath)
+    
+    # Security check: ensure the requested path is within /data
+    if not os.path.abspath(full_path).startswith(os.path.abspath(data_dir)):
+        return jsonify({"error": "Invalid path"}), 403
+    
+    if not os.path.exists(full_path):
+        return jsonify({"error": "File not found"}), 404
+    
+    return send_file(full_path)
 
 
 if __name__ == "__main__":

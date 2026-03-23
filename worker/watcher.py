@@ -7,7 +7,7 @@ import atexit
 from shared.models import Job
 
 
-JOBS_DIR = "shared/data"
+JOBS_DIR = "/data"
 
 
 class JobResult:
@@ -37,6 +37,7 @@ def load_job(job_file):
     )
     job.fastp_command = data.get("fastp_command")
     job.kraken_command = data.get("kraken_command")
+    job.krona_command = data.get("krona_command")
     return job
 
 
@@ -44,14 +45,50 @@ def process_job(job):
     job.status = "processing"
     job.save()
     
-    # fastp
-    subprocess.run(job.fastp_command, shell=True, check=True)
+    try:
+        print(f"Running fastp...")
+        result = subprocess.run(job.fastp_command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Fastp failed: {result.stderr}")
+            job.status = "failed"
+            job.save()
+            return
+        print(f"Fastp completed")
+    except Exception as e:
+        print(f"Fastp exception: {e}")
+        job.status = "failed"
+        job.save()
+        return
     
-    # kraken2
-    subprocess.run(job.kraken_command, shell=True, check=True)
+    try:
+        print(f"Running kraken2...")
+        result = subprocess.run(job.kraken_command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Kraken failed: {result.stderr}")
+            job.status = "failed"
+            job.save()
+            return
+        print(f"Kraken completed")
+    except Exception as e:
+        print(f"Kraken exception: {e}")
+        job.status = "failed"
+        job.save()
+        return
     
-    # krona
-    subprocess.run(job.krona_command, shell=True, check=True)
+    try:
+        print(f"Running krona...")
+        result = subprocess.run(job.krona_command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Krona failed: {result.stderr}")
+            job.status = "failed"
+            job.save()
+            return
+        print(f"Krona completed")
+    except Exception as e:
+        print(f"Krona exception: {e}")
+        job.status = "failed"
+        job.save()
+        return
 
     job.status = "completed"
     job.save()
@@ -86,7 +123,7 @@ def main():
                             print(f"Processing job {job.job_id}...")
                             process_job(job)
                     except Exception as e:
-                        print(f"Error reading job file {job_file}: {e}")
+                        print(f"Error in rading job file {job_file}: {e}")
         except Exception as e:
             print(f"Error scanning jobs directory: {e}")
         
@@ -94,6 +131,7 @@ def main():
 
 
 def clean_unfinished_jobs():
+    print("Cleaning up messeeeesss")
     try:
         for job_id in os.listdir(JOBS_DIR):
             job_dir = os.path.join(JOBS_DIR, job_id)

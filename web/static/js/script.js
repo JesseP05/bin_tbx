@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const resultGrid = document.querySelector('[job-id]');
+    const resultGrid = document.querySelector('[data-job-id]');
     if (!resultGrid) {
         console.log("No id given, no job started this session.");
         return;
@@ -24,7 +24,7 @@ function getJobStatus(id) {
 }
 
 function showResults(data) {
-    document.getElementById("fastp-result").src = "/" + data.fastq_report;
-    document.getElementById("kraken-result").src = "/" + data.krona_output;
+    document.getElementById("fastp-result").src = "../" + data.fastq_report;
+    document.getElementById("kraken-result").src = "../" + data.krona_output;
     document.getElementById("results-container").classList.add("show");
 }

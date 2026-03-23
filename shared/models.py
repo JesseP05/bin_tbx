@@ -18,7 +18,7 @@ class Job:
         self.krona_command = None
 
     class FastP:
-        def __init__(self, threads = 4, **kwargs):
+        def __init__(self, threads = 8, **kwargs):
             self.threads = threads
             self.quality = int(kwargs.get('min-quality'))
             self.trim_adapters = bool(kwargs.get('trim-adapters'))
@@ -29,13 +29,14 @@ class Job:
             self.deduplicate = bool(kwargs.get('deduplicate'))
     
     class Kraken:
-        def __init__(self, db = '/human_viral_db', threads = 4, **kwargs):
+        def __init__(self, db = '/human_viral_db', threads = 8, **kwargs):
             self.db = db
             self.threads = threads
             self.confidence = float(kwargs.get('confidence'))
             self.paired_end = bool(kwargs.get('paired-end'))
-            self.use_science_names = bool(kwargs.get('use-science-names'))
+            self.b_use_science_names = bool(kwargs.get('use-science-names'))
             self.base_quality = int(kwargs.get('base-quality'))
+            self.use_science_names_str = "--use-names" if self.b_use_science_names else ""
     
     def create_commands(self):
         """Create cli commands for running fastp and kraken2 with given configurations."""
@@ -47,7 +48,7 @@ class Job:
         -o {self.filepath}/{self.job_id}_fastp_output.fastq"
         
         self.kraken_command = f"kraken2 --db {self.kraken.db} --threads {self.kraken.threads} --confidence {self.kraken.confidence} \
-        --use-names {self.kraken.use_science_names} --minimum-base-quality {self.kraken.base_quality} --report {self.filepath}/{self.job_id}_kraken_report.txt \
+        {self.kraken.use_science_names_str} --minimum-base-quality {self.kraken.base_quality} --report {self.filepath}/{self.job_id}_kraken_report.txt \
         --output {self.filepath}/{self.job_id}_kraken_output.txt {self.filepath}/{self.job_id}_fastp_output.fastq"
 
         self.krona_command = f"ktImportTaxonomy -o {self.filepath}/{self.job_id}_krona.html {self.filepath}/{self.job_id}_kraken_report.txt"

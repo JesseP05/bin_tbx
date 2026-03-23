@@ -4,6 +4,7 @@
 {{ super() }} 
 <!-- super is zodat de head van de base.html niet wordt overschreven -->
 <link rel="stylesheet" href="../static/css/index.css">
+<script src="../static/js/script.js"></script>
 {% endblock %}
 
 {% block title %}FASTQ Analysis Pipeline{% endblock %}
@@ -142,7 +143,7 @@
         <button type="submit">Run analysis</button>
     </div>
 
-    <div id="results-container" job-id="{{ current_job }}">
+    <div id="results-container" data-job-id="{{ current_job }}">
         <h2>Results</h2>
         <div class="results-grid">
             <div class="result-item">
@@ -156,9 +157,4 @@
         </div>
     </div>
 </form>
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-<script src="../static/js/script.js"></script>
 {% endblock %}

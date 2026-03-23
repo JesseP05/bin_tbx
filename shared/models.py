@@ -15,6 +15,7 @@ class Job:
         self.kwargs = kwargs
         self.fastp_command = None
         self.kraken_command = None
+        self.krona_command = None
 
     class FastP:
         def __init__(self, threads = 4, **kwargs):
@@ -49,6 +50,7 @@ class Job:
         --use-names {self.kraken.use_science_names} --minimum-base-quality {self.kraken.base_quality} --report {self.filepath}/{self.job_id}_kraken_report.txt \
         --output {self.filepath}/{self.job_id}_kraken_output.txt {self.filepath}/{self.job_id}_fastp_output.fastq"
 
+        self.krona_command = f"ktImportTaxonomy -o {self.filepath}/{self.job_id}_krona.html {self.filepath}/{self.job_id}_kraken_report.txt"
 
     def save(self):
         """Save job info"""
@@ -59,6 +61,7 @@ class Job:
             "status": self.status,
             "fastp_command": self.fastp_command,
             "kraken_command": self.kraken_command,
+            "krona_command": self.krona_command,
         }
         with open(f"{self.filepath}/{self.job_id}_job.json", "w") as f:
             json.dump(job_data, f, indent=4)

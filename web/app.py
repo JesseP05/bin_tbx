@@ -3,7 +3,7 @@
 import json
 import time
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from shared.models import Job
 
 
@@ -46,8 +46,9 @@ def index():
         job = Job(job_id, fastq_path, "pending", fastp=fastp, kraken=kraken)
         job.create_commands()
         job.save()
+        return render_template('index.html', title="Pipeline", current_job=job_id)
 
-    return render_template('index.html', title="Pipeline")
+    return render_template('index.html', title="Pipeline", current_job=None)
 
 
 @app.route("/about")
@@ -58,6 +59,24 @@ def about():
 @app.route("/how-to")
 def usage():
     return render_template('usage.html', title="How to use")
+
+
+@app.route("/job/<job_id>/status")
+def get_job_status(job_id):
+    job_dir = f"shared/data/{job_id}"
+    results_file = f"{job_dir}/{job_id}_results.json"
+    job_file = f"{job_dir}/{job_id}_job.json"
+    
+    if os.path.exists(results_file):
+        with open(results_file, "r") as f:
+            return jsonify(json.load(f))
+    
+    if os.path.exists(job_file):
+        with open(job_file, "r") as f:
+            data = json.load(f)
+            return jsonify({"job_id": job_id, "status": data["status"]})
+    
+    return jsonify({"error": "Job not found"}), 404
 
 
 if __name__ == "__main__":

@@ -123,7 +123,7 @@ def main():
                             print(f"Processing job {job.job_id}...")
                             process_job(job)
                     except Exception as e:
-                        print(f"Error in rading job file {job_file}: {e}")
+                        print(f"Error in reading job file {job_file}: {e}")
         except Exception as e:
             print(f"Error scanning jobs directory: {e}")
         

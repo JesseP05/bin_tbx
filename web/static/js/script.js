@@ -6,7 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const jobId = resultGrid.dataset.jobId;
     if (jobId && jobId !== 'None') {
+        document.getElementById("throbber").style.display = "block";
         fetchTimeout = setTimeout(() => getJobStatus(jobId), 4000);
+    }
+    
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', () => {
+            document.getElementById("throbber").style.display = "block";
+            document.getElementById("results-container").style.display = "none";
+        });
     }
 });
 
@@ -28,7 +37,11 @@ function getJobStatus(id) {
 }
 
 function showResults(data) {
-    document.getElementById("fastp-result").src = "../" + data.fastq_report;
-    document.getElementById("kraken-result").src = "../" + data.krona_output;
-    document.getElementById("results-container").classList.add("show");
+    document.getElementById("throbber").style.display = "none";
+    
+    if (data.fastq_report && data.krona_output) {
+        document.getElementById("fastp-result").src = "../" + data.fastq_report;
+        document.getElementById("kraken-result").src = "../" + data.krona_output;
+        document.getElementById("results-container").style.display = "block";
+    }
 }

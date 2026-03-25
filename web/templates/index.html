@@ -141,9 +141,13 @@
 
     <div class="section">
         <button type="submit">Run analysis</button>
+        <div id="throbber" class="throbber" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing...</p>
+        </div>
     </div>
 
-    <div id="results-container" data-job-id="{{ current_job }}">
+    <div id="results-container" data-job-id="{{ current_job }}" style="display: none;">
         <h2>Results</h2>
         <div class="results-grid">
             <div class="result-item">

@@ -20,9 +20,9 @@ def index():
         fastq_name = fastq_file.name
 
         job_dir = f"/data/{job_id}"
-        os.makedirs(job_dir, exist_ok=True)
         
         fastq_path = f"{job_dir}/{fastq_name}.fastq"
+        os.makedirs(job_dir, exist_ok=True)
         fastq_file.save(fastq_path)
 
         fastp_kwargs = {

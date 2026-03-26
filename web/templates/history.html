@@ -9,22 +9,35 @@
 
 {% block content %}
 <div class="header">
-    <h1>Analysis History</h1>
+    <div>
+        <h1>Analysis History</h1>
+    </div>
     <a href="/" id="clear-history">Clear History</a>
 </div>
+
+{% if history %}
     {% for job in history %}
-        <div class="history-item">
-            <p><strong>Job ID:</strong> {{ job.job_id }}</p>
-            <p><strong>Status:</strong> {{ job.status }}</p>
-            <p><strong>Completed At:</strong> {{ job.timestamp }}</p>
-            <p><strong>Size:</strong> {{ job.size }}</p>
-            
+        <article class="history-item">
+            <div class="history-meta">
+                <p><strong>Job ID:</strong> <span>{{ job.job_id }}</span></p>
+                <p><strong>Status:</strong> <span class="status">{{ job.status }}</span></p>
+                <p><strong>Completed At:</strong> <span>{{ job.timestamp }}</span></p>
+                <p><strong>Size:</strong> <span>{{ job.size }}</span></p>
+            </div>
+
             <details>
                 <summary>Output</summary>
-                <iframe id="fastp-result" src= "{{ job.fastp_report }}"></iframe>
-                <iframe id="kraken-result" src= "{{ job.krona_output }}"></iframe>
+                <div class="report-grid">
+                    <iframe class="report-frame" title="FastP report for {{ job.job_id }}" src="{{ job.fastp_report }}"></iframe>
+                    <iframe class="report-frame" title="Krona report for {{ job.job_id }}" src="{{ job.krona_output }}"></iframe>
+                </div>
             </details>
-        </div>
+        </article>
     {% endfor %}
+{% else %}
+    <div class="history-empty">
+        <p>No analyses have been run yet.</p>
+    </div>
+{% endif %}
 
 {% endblock %}

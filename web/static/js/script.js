@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form) {
         form.addEventListener("submit", () => {
             document.getElementById("throbber").style.display = "block";
+            document.getElementById("submit_btn").style.display = "none";
             document.getElementById("results-container").style.display = "none";
         });
     }

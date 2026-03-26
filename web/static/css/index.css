@@ -83,6 +83,7 @@ button:hover {
 }
 
 .throbber {
+    display: none;
     text-align: center;
     margin-top: 24px;
 }
@@ -150,4 +151,19 @@ summary:hover {
 
 details[open] summary {
     color: #0056b3;
+}
+
+#new-analysis {
+    display: none;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+#new-analysis:hover {
+    background-color: #0056b3;
 }

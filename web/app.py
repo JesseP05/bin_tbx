@@ -4,7 +4,7 @@ import json
 import time
 import os
 import subprocess
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from shared.models import Job
 
 

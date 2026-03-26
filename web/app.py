@@ -143,5 +143,15 @@ def history():
     return render_template('history.html', history=history)
 
 
+@app.route("/clear-history")
+def clear_history():
+    data_dir = "/data"
+    for job_dir in os.listdir(data_dir):
+        job_path = os.path.join(data_dir, job_dir)
+        if os.path.isdir(job_path):
+            subprocess.run(f"rm -rf {job_path}", shell=True)
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

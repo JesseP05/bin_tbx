@@ -120,7 +120,7 @@
             <label>
                 <span class="config-tooltip" tabindex="0">
                     Use scientific names
-                    <span class="tooltip">Toont wetenschappelijke namen in plaats van taxon-ID’s.</span>
+                    <span class="tooltip">Toont wetenschappelijke namen in plaats van taxon-ID's.</span>
                 </span>
                 <select name="kraken-use-names">
                     <option value="false">No</option>
@@ -140,14 +140,15 @@
     </div>
 
     <div class="section">
-        <button type="submit">Run analysis</button>
-        <div id="throbber" class="throbber" style="display: none;">
+        <button type="submit" id="submit_btn">Run analysis</button>
+        <a href="/" id="new-analysis">New analysis</a>
+        <div id="throbber" class="throbber">
             <div class="spinner"></div>
             <p>Analyzing...</p>
         </div>
     </div>
 
-    <div id="results-container" data-job-id="{{ current_job }}" style="display: none;">
+    <div id="results-container" data-job-id="{{ current_job }}">
         <h2>Results</h2>
         <div class="results-grid">
             <div class="result-item">

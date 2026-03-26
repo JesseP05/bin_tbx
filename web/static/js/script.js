@@ -1,19 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const resultGrid = document.querySelector('[data-job-id]');
+document.addEventListener("DOMContentLoaded", () => {
+    const resultGrid = document.querySelector("[data-job-id]");
     if (!resultGrid) {
         console.log("No id given, no job started this session.");
         return;
     }
     const jobId = resultGrid.dataset.jobId;
-    if (jobId && jobId !== 'None') {
+    if (jobId && jobId !== "None") {
+        document.getElementById("submit_btn").style.display = "none";
         document.getElementById("throbber").style.display = "block";
         fetchTimeout = setTimeout(() => getJobStatus(jobId), 4000);
     }
     
-    const form = document.querySelector('form');
+    const form = document.querySelector("form");
     if (form) {
-        form.addEventListener('submit', () => {
+        form.addEventListener("submit", () => {
             document.getElementById("throbber").style.display = "block";
+            document.getElementById("submit_btn").style.display = "none";
             document.getElementById("results-container").style.display = "none";
         });
     }
@@ -42,6 +44,7 @@ function showResults(data) {
     if (data.fastq_report && data.krona_output) {
         document.getElementById("fastp-result").src = "../" + data.fastq_report;
         document.getElementById("kraken-result").src = "../" + data.krona_output;
+        document.getElementById("new-analysis").style.display = "inline-block";
         document.getElementById("results-container").style.display = "block";
     }
 }

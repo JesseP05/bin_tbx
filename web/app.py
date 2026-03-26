@@ -3,7 +3,7 @@
 import json
 import time
 import os
-import logging
+import subprocess
 from flask import Flask, render_template, request, jsonify, send_file
 from shared.models import Job
 
@@ -110,8 +110,7 @@ def get_job_status(job_id):
 def serve_data(filepath):
     data_dir = "/data"
     full_path = os.path.join(data_dir, filepath)
-    
-    # Security check: ensure the requested path is within /data
+
     if not os.path.abspath(full_path).startswith(os.path.abspath(data_dir)):
         return jsonify({"error": "Invalid path"}), 403
     
@@ -119,6 +118,29 @@ def serve_data(filepath):
         return jsonify({"error": "File not found"}), 404
     
     return send_file(full_path)
+
+
+@app.route("/history")
+def history():
+    data_dir = "/data"
+    history = []
+    for job_dir in os.listdir(data_dir):
+        job_path = os.path.join(data_dir, job_dir)
+        if os.path.isdir(job_path):
+            results_file = os.path.join(job_path, f"{job_dir}_results.json")
+            if os.path.exists(results_file):
+                result = subprocess.run(f"du -hs {job_path}", shell=True, stdout=subprocess.PIPE, text=True)
+                with open(results_file, "r") as f:
+                    job_data = json.load(f)
+                    history.append({
+                        "job_id": job_dir,
+                        "status": job_data.get("status"),
+                        "timestamp": job_data.get("completed_at", 0),
+                        "size": result.stdout.strip().split()[0] if result.returncode == 0 else "N/A",
+                        "fastp_report": job_data.get("fastq_report"),
+                        "krona_output": job_data.get("krona_output"),
+                    })
+    return render_template('history.html', history=history)
 
 
 if __name__ == "__main__":

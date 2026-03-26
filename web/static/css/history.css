@@ -1,0 +1,35 @@
+.history-item {
+    display: block;
+    padding: 10px 10px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 2px solid #007bff;
+}
+
+#clear-history {
+    display: block;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item p {
+    margin: 0;
+    display: inline-grid;
+    margin-left: 10px;
+    background-color: #f9f9f9bb;
+}
+.history-item strong {
+    padding-bottom: 4px;
+}

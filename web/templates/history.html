@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="../static/css/history.css">
+{% endblock %}
+
+{% block title %}Project: Virus Scanner Pipeline{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Analysis History</h1>
+    <a href="/" id="clear-history">Clear History</a>
+</div>
+    {% for job in history %}
+        <div class="history-item">
+            <p><strong>Job ID:</strong> {{ job.job_id }}</p>
+            <p><strong>Status:</strong> {{ job.status }}</p>
+            <p><strong>Completed At:</strong> {{ job.timestamp }}</p>
+            <p><strong>Size:</strong> {{ job.size }}</p>
+            
+            <details>
+                <summary>Output</summary>
+                <iframe id="fastp-result" src= "{{ job.fastp_report }}"></iframe>
+                <iframe id="kraken-result" src= "{{ job.krona_output }}"></iframe>
+            </details>
+        </div>
+    {% endfor %}
+
+{% endblock %}

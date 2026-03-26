@@ -5,6 +5,7 @@
 <!-- super is zodat de head van de base.html niet wordt overschreven -->
 <link rel="stylesheet" href="../static/css/index.css">
 <script src="../static/js/script.js"></script>
+<script src="../static/js/paired.js"></script>
 {% endblock %}
 
 {% block title %}FASTQ Analysis Pipeline{% endblock %}
@@ -16,14 +17,18 @@
 <form method="POST" action="/" enctype="multipart/form-data">
     <div class="section">
         <h2>Input Files</h2>
-        <label>
+        <label id="read1-label">
             Upload FASTQ file
-            <input type="file" class="file-input" name="fastq-file" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+            <input type="file" class="file-input" name="fastq-file-r1" accept=".fastq,.fq,.fastq.gz,.fq.gz">
+        </label>
+        <label id="read2-label">
+            Upload FASTQ Read 2
+            <input type="file" class="file-input" name="fastq-file-r2" accept=".fastq,.fq,.fastq.gz,.fq.gz">
         </label>
     </div>
 
     <div class="section">
-        <h2>fastp Configuration</h2>
+        <h2>FastP Configuration</h2>
         <div class="config-group">
             <label>
                 <span class="config-tooltip" tabindex="0">
@@ -39,8 +44,8 @@
                     <span class="tooltip">Verwijdert adapter-sequenties die tijdens sequencing zijn meegekomen.</span>
                 </span>
                 <select name="fastp-adapter">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 </select>
             </label>
 
@@ -66,8 +71,8 @@
                     <span class="tooltip">Verwijdert lage kwaliteit bases aan het begin van de read.</span>
                 </span>
                 <select name="fastp-cut-front">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </label>
 
@@ -77,8 +82,8 @@
                     <span class="tooltip">Verwijdert lage kwaliteit bases aan het einde van de read.</span>
                 </span>
                 <select name="fastp-cut-tail">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </label>
 
@@ -88,8 +93,19 @@
                     <span class="tooltip">Verwijdert identieke reads die vaak ontstaan door PCR-vermenigvuldiging.</span>
                 </span>
                 <select name="fastp-dedup">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </label>
+
+            <label>
+                <span class="config-tooltip" tabindex="0">
+                    Paired reads
+                    <span class="tooltip">Geef aan of input paired-end reads zijn.</span>
+                </span>
+                <select name="fastp-paired" id="fastp-paired-select">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </label>
         </div>
@@ -111,9 +127,9 @@
                     Paired reads
                     <span class="tooltip">Geef aan of input paired-end reads bevat.</span>
                 </span>
-                <select name="kraken-paired">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
+                <select name="kraken-paired" id="kraken-paired">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </label>
 
@@ -123,8 +139,8 @@
                     <span class="tooltip">Toont wetenschappelijke namen in plaats van taxon-ID's.</span>
                 </span>
                 <select name="kraken-use-names">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </label>
 

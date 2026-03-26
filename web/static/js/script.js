@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (jobId && jobId !== "None") {
         document.getElementById("submit_btn").style.display = "none";
         document.getElementById("throbber").style.display = "block";
-        fetchTimeout = setTimeout(() => getJobStatus(jobId), 4000);
+        fetchTimeout = setTimeout(() => getJobStatus(jobId), 10000);
     }
     
     const form = document.querySelector("form");
@@ -32,7 +32,7 @@ function getJobStatus(id) {
 		}
 		showResults(data)
             } else if (data.status === "processing" || data.status === "pending") {
-                fetchTimeout = setTimeout(() => getJobStatus(id), 2000);
+                fetchTimeout = setTimeout(() => getJobStatus(id), 10000);
             }
         })
         .catch(err => console.error("Error polling status:", err));

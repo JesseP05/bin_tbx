@@ -103,7 +103,7 @@ class Job:
                 f"--output {kraken_output} {fastp_output_r1}"
             )
 
-        self.krona_command = f"ktImportTaxonomy -o {krona_output} {kraken_report}"
+        self.krona_command = f"ktImportTaxonomy -m 3 -t 5 -o {krona_output} {kraken_report}"
 
     def save(self):
         """Save job info"""

@@ -18,7 +18,7 @@ class Job:
         **kwargs,
     ):
         self.job_id = job_id
-        self.fastq_filename_r1 = fastq_filename_r1 or fastq_filename
+        self.fastq_filename_r1 = fastq_filename_r1
         self.fastq_filename_r2 = fastq_filename_r2
         self.filepath = filepath
         self.status = status
@@ -29,6 +29,14 @@ class Job:
         self.fastp_command = None
         self.kraken_command = None
         self.krona_command = None
+        self.job_size = None
+
+        self.fastp_html_out = f"{self.filepath}/{self.job_id}_fastp.html"
+        self.fastp_output_r1 = f"{self.filepath}/{self.job_id}_fastp_output.fastq"
+        self.fastp_output_r2 = f"{self.filepath}/{self.job_id}_fastp_output_r2.fastq"
+        self.kraken_report = f"{self.filepath}/{self.job_id}_kraken_report.txt"
+        self.kraken_output = f"{self.filepath}/{self.job_id}_kraken_output.txt"
+        self.krona_output = f"{self.filepath}/{self.job_id}_krona.html"
 
     class FastP:
         def __init__(self, threads = 8, **kwargs):
@@ -55,13 +63,6 @@ class Job:
     def create_commands(self):
         """Create cli commands for running fastp, kraken and krona with given configurations."""
 
-        fastp_html_out = f"{self.filepath}/{self.job_id}_fastp.html"
-        fastp_output_r1 = f"{self.filepath}/{self.job_id}_fastp_output.fastq"
-        fastp_output_r2 = f"{self.filepath}/{self.job_id}_fastp_output_r2.fastq"
-        kraken_report = f"{self.filepath}/{self.job_id}_kraken_report.txt"
-        kraken_output = f"{self.filepath}/{self.job_id}_kraken_output.txt"
-        krona_output = f"{self.filepath}/{self.job_id}_krona.html"
-
         trim_adapter_flag = "" if self.fastp.trim_adapters else "-A"
         cut_front_flag = "-5" if self.fastp.cut_front else ""
         cut_tail_flag = "-3" if self.fastp.cut_tail else ""
@@ -72,18 +73,18 @@ class Job:
         if is_paired:
             self.fastp_command = (
                 f"fastp -i {self.fastq_filename_r1} -I {self.fastq_filename_r2} "
-                f"-h {fastp_html_out} -w {self.fastp.threads} -q {self.fastp.quality} "
+                f"-h {self.fastp_html_out} -w {self.fastp.threads} -q {self.fastp.quality} "
                 f"-l {self.fastp.length_min} --length_limit {self.fastp.length_max}"
                 f" {trim_adapter_flag} {cut_front_flag} {cut_tail_flag} {dedup_flag} "
-                f"-o {fastp_output_r1} -O {fastp_output_r2}"
+                f"-o {self.fastp_output_r1} -O {self.fastp_output_r2}"
             )
         else:
             self.fastp_command = (
-                f"fastp -i {self.fastq_filename_r1} -h {fastp_html_out} "
+                f"fastp -i {self.fastq_filename_r1} -h {self.fastp_html_out} "
                 f"-w {self.fastp.threads} -q {self.fastp.quality} "
                 f"-l {self.fastp.length_min} --length_limit {self.fastp.length_max}"
                 f" {trim_adapter_flag} {cut_front_flag} {cut_tail_flag} {dedup_flag} "
-                f"-o {fastp_output_r1}"
+                f"-o {self.fastp_output_r1}"
             )
 
         kraken_name_flag = f" {self.kraken.use_science_names_str}" if self.kraken.use_science_names_str else ""
@@ -92,24 +93,25 @@ class Job:
             self.kraken_command = (
                 f"kraken2 --db {self.kraken.db} --threads {self.kraken.threads} "
                 f"--confidence {self.kraken.confidence} --minimum-base-quality {self.kraken.base_quality}"
-                f"{kraken_name_flag} --paired --report {kraken_report} "
-                f"--output {kraken_output} {fastp_output_r1} {fastp_output_r2}"
+                f"{kraken_name_flag} --paired --report {self.kraken_report} "
+                f"--output {self.kraken_output} {self.fastp_output_r1} {self.fastp_output_r2}"
             )
         else:
             self.kraken_command = (
                 f"kraken2 --db {self.kraken.db} --threads {self.kraken.threads} "
                 f"--confidence {self.kraken.confidence} --minimum-base-quality {self.kraken.base_quality}"
-                f"{kraken_name_flag} --report {kraken_report} "
-                f"--output {kraken_output} {fastp_output_r1}"
+                f"{kraken_name_flag} --report {self.kraken_report} "
+                f"--output {self.kraken_output} {self.fastp_output_r1}"
             )
 
-        self.krona_command = f"ktImportTaxonomy -m 3 -t 5 -o {krona_output} {kraken_report}"
+        self.krona_command = f"ktImportTaxonomy -m 3 -t 5 -o {self.krona_output} {self.kraken_report}"
 
     def save(self):
         """Save job info"""
+        is_paired = bool(self.fastq_filename_r2) and bool(getattr(self.fastp, "paired", True))
+
         job_data = {
             "job_id": self.job_id,
-            "fastq_filename": self.fastq_filename_r1,
             "fastq_filename_r1": self.fastq_filename_r1,
             "fastq_filename_r2": self.fastq_filename_r2,
             "filepath": self.filepath,
@@ -117,6 +119,10 @@ class Job:
             "fastp_command": self.fastp_command,
             "kraken_command": self.kraken_command,
             "krona_command": self.krona_command,
+            "job_size": self.job_size,
+            "rm_after_fastp": [self.fastq_filename_r1, self.fastq_filename_r2] if is_paired else [self.fastq_filename_r1],
+            "rm_after_kraken": [self.fastp_output_r1, self.fastp_output_r2] if is_paired else [self.fastp_output_r1],
+            "rm_after_krona": [self.kraken_output],
         }
         with open(f"{self.filepath}/{self.job_id}_job.json", "w") as f:
             json.dump(job_data, f, indent=4)

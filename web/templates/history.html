@@ -22,10 +22,9 @@
             <div class="history-grid">
                 <p><strong>Job ID:</strong> <span>{{ job.job_id }}</span></p>
                 <p><strong>Status:</strong> <span class="status">{{ job.status }}</span></p>
+                <a href="/rm/{{ job.job_id }}" class="clear-history" id="clear-individual">Delete</a>
                 <p><strong>Completed At:</strong> <span>{{ job.timestamp }}</span></p>
                 <p><strong>Size:</strong> <span>{{ job.job_size }}</span></p>
-                <a href="/rm/{{ job.job_id }}" class="clear-history" id="clear-individual">Delete</a><p><strong>Completed At:</strong> <span>{{ job.timestamp }}</span></p>
-                <p><strong>Size:</strong> <span>{{ job.size }}</span></p>
             </div>
 
             <details>

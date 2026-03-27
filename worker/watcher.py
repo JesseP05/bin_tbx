@@ -20,6 +20,7 @@ class JobResult:
         self.kraken_output = f"{job.filepath}/{job.job_id}_kraken_output.txt"
         self.krona_output = f"{job.filepath}/{job.job_id}_krona.html"
         self.completed_at = time.ctime()
+        self.job_size = job.job_size
     
     def save(self, job_dir):
         with open(f"{job_dir}/{self.job_id}_results.json", "w") as f:
@@ -31,66 +32,67 @@ def load_job(job_file):
         data = json.load(f)
     job = Job(
         job_id=data["job_id"],
-        fastq_filename=data["fastq_filename"],
+        fastq_filename_r1=data.get("fastq_filename_r1"),
+        fastq_filename_r2=data.get("fastq_filename_r2"),
         filepath=data["filepath"],
-        status=data["status"]
+        status=data["status"],
     )
     job.fastp_command = data.get("fastp_command")
     job.kraken_command = data.get("kraken_command")
     job.krona_command = data.get("krona_command")
+    job.job_size = data.get("job_size")
+    job.rm_after_fastp = data.get("rm_after_fastp") or []
+    job.rm_after_kraken = data.get("rm_after_kraken") or []
+    job.rm_after_krona = data.get("rm_after_krona") or []
     return job
+
+
+def run_tool(job, tool, command):
+    try:
+        print(f"Running {tool}...")
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"{tool} failed: {result.stderr}")
+            job.status = "failed"
+            job.save()
+            return False
+        print(f"{tool} completed")
+
+        # remove large process files to save space
+        match tool:
+            case "fastp":
+                for f in job.rm_after_fastp:
+                    os.remove(f)
+            case "kraken2":
+                for f in job.rm_after_kraken:
+                    os.remove(f)
+            case "krona":
+                for f in job.rm_after_krona:
+                    os.remove(f)
+        return True
+    except Exception as e:
+        print(f"{tool} exception: {e}")
+        job.status = "failed"
+        job.save()
+        return False
 
 
 def process_job(job):
     job.status = "processing"
     job.save()
-    
-    try:
-        print(f"Running fastp...")
-        result = subprocess.run(job.fastp_command, shell=True, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"Fastp failed: {result.stderr}")
-            job.status = "failed"
-            job.save()
+
+    tool_args = [
+        ("fastp", job.fastp_command),
+        ("kraken2", job.kraken_command),
+        ("krona", job.krona_command)
+    ]
+    for tool, command in tool_args:
+        if not run_tool(job, tool, command):
             return
-        print(f"Fastp completed")
-    except Exception as e:
-        print(f"Fastp exception: {e}")
-        job.status = "failed"
-        job.save()
-        return
-    
-    try:
-        print(f"Running kraken2...")
-        result = subprocess.run(job.kraken_command, shell=True, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"Kraken failed: {result.stderr}")
-            job.status = "failed"
-            job.save()
-            return
-        print(f"Kraken completed")
-    except Exception as e:
-        print(f"Kraken exception: {e}")
-        job.status = "failed"
-        job.save()
-        return
-    
-    try:
-        print(f"Running krona...")
-        result = subprocess.run(job.krona_command, shell=True, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"Krona failed: {result.stderr}")
-            job.status = "failed"
-            job.save()
-            return
-        print(f"Krona completed")
-    except Exception as e:
-        print(f"Krona exception: {e}")
-        job.status = "failed"
-        job.save()
-        return
 
     job.status = "completed"
+    result = subprocess.run(f"du -hs {job.filepath}", shell=True, stdout=subprocess.PIPE, text=True)
+    job.job_size = result.stdout.strip().split()[0] if result.returncode == 0 else None
     job.save()
     
     result = JobResult(job)

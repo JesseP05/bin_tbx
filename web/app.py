@@ -5,6 +5,7 @@ import time
 import os
 import subprocess
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
+from werkzeug.utils import secure_filename
 from shared.models import Job
 
 
@@ -28,8 +29,8 @@ def index():
             fastq_file_r1 = request.files.get("fastq-file-r1")
             fastq_file_r2 = request.files.get("fastq-file-r2")
 
-            fastq_name_r1 = fastq_file_r1.name
-            fastq_name_r2 = fastq_file_r2.name
+            fastq_name_r1 = secure_filename(fastq_file_r1.filename)
+            fastq_name_r2 = secure_filename(fastq_file_r2.filename)
 
             fastq_path_r1 = f"{job_dir}/{fastq_name_r1}"
             fastq_path_r2 = f"{job_dir}/{fastq_name_r2}"
@@ -37,7 +38,7 @@ def index():
             fastq_file_r2.save(fastq_path_r2)
         else:
             fastq_file = request.files.get("fastq-file-r1")
-            fastq_name = fastq_file.name
+            fastq_name = secure_filename(fastq_file.filename)
 
             fastq_path_r1 = f"{job_dir}/{fastq_name}"
             fastq_file.save(fastq_path_r1)
@@ -129,18 +130,17 @@ def history():
         if os.path.isdir(job_path):
             results_file = os.path.join(job_path, f"{job_dir}_results.json")
             if os.path.exists(results_file):
-                result = subprocess.run(f"du -hs {job_path}", shell=True, stdout=subprocess.PIPE, text=True)
                 with open(results_file, "r") as f:
                     job_data = json.load(f)
                     history.append({
                         "job_id": job_dir,
                         "status": job_data.get("status"),
                         "timestamp": job_data.get("completed_at", 0),
-                        "size": result.stdout.strip().split()[0] if result.returncode == 0 else "N/A",
+                        "job_size": job_data.get("job_size", "N/A"),
                         "fastp_report": job_data.get("fastq_report"),
                         "krona_output": job_data.get("krona_output"),
                     })
-    history.sort(key=lambda x: x["timestamp"], reverse=False)
+    history.sort(key=lambda x: x["job_id"], reverse=True)
     return render_template('history.html', history=history)
 
 

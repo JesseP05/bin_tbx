@@ -140,6 +140,7 @@ def history():
                         "fastp_report": job_data.get("fastq_report"),
                         "krona_output": job_data.get("krona_output"),
                     })
+    history.sort(key=lambda x: x["timestamp"], reverse=False)
     return render_template('history.html', history=history)
 
 

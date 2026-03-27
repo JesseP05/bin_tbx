@@ -18,6 +18,7 @@
 {% if history %}
     {% for job in history %}
         <article class="history-item">
+            <h2 class="fake-header">Validator header :</h2>
             <div class="history-meta">
                 <p><strong>Job ID:</strong> <span>{{ job.job_id }}</span></p>
                 <p><strong>Status:</strong> <span class="status">{{ job.status }}</span></p>
@@ -26,9 +27,14 @@
             </div>
 
             <details>
-                <summary>Output</summary>
+                <summary>FastP Report</summary>
                 <div class="report-grid">
                     <iframe class="report-frame" title="FastP report for {{ job.job_id }}" src="{{ job.fastp_report }}"></iframe>
+                </div>
+            </details>
+            <details>
+                <summary>Krona Report</summary>
+                <div class="report-grid">
                     <iframe class="report-frame" title="Krona report for {{ job.job_id }}" src="{{ job.krona_output }}"></iframe>
                 </div>
             </details>

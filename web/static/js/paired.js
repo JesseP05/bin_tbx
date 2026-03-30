@@ -1,27 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const read2Label = document.getElementById("read2-label");
+    const fastpPaired = document.getElementById("fastp-paired-select");
+    const krakenPaired = document.getElementById("kraken-paired");
 
-    document.getElementById("fastp-paired-select").addEventListener("change", function() {
-        input_r2 = document.getElementById("read2-label");
-        kraken_paired = document.getElementById("kraken-paired");
-        if (this.value === "1") {
-            input_r2.style.display = "inline";
-            kraken_paired.value = "1";
-        } else {
-            input_r2.style.display = "none";
-            kraken_paired.value = "0";
-            kraken_paired.dispatchEvent(new Event("change"));
+    const syncPairedState = (value, source) => {
+        const showRead2 = value === "1";
+        read2Label.style.display = showRead2 ? "inline" : "none";
+
+        if (source === "kraken") {
+            fastpPaired.value = value;
         }
+        if (source === "fastp") {
+            krakenPaired.value = value;
+        }
+    };
+
+    fastpPaired.addEventListener("change", (event) => {
+        syncPairedState(event.target.value, "fastp");
     });
-    document.getElementById("kraken-paired").addEventListener("change", function() {
-        input_r2 = document.getElementById("read2-label");
-        fast_paired = document.getElementById("fastp-paired-select");
-        if (this.value === "1") {
-            input_r2.style.display = "inline";
-            fast_paired.value = "1";
-        } else {
-            input_r2.style.display = "none";
-            fast_paired.value = "0";
-            fast_paired.dispatchEvent(new Event("change"));
-        }
+
+    krakenPaired.addEventListener("change", (event) => {
+        syncPairedState(event.target.value, "kraken");
     });
 });

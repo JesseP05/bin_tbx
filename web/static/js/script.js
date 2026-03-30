@@ -1,4 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme-preference");
+    if (savedTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.getElementById("theme-toggle").textContent = "☀️";
+    }
+
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
+        const html = document.documentElement;
+        if (html.getAttribute("data-theme") === "dark") {
+            html.removeAttribute("data-theme");
+            document.getElementById("theme-toggle").textContent = "🌙";
+            localStorage.setItem("theme-preference", "light");
+        } else {
+            html.setAttribute("data-theme", "dark");
+            document.getElementById("theme-toggle").textContent = "☀️";
+            localStorage.setItem("theme-preference", "dark");
+        }
+    });
+
     const resultGrid = document.querySelector("[data-job-id]");
     if (!resultGrid) {
         console.log("No id given, no job started this session.");
@@ -26,11 +45,11 @@ function getJobStatus(id) {
         .then(res => res.json())
         .then(data => {
             if (data.status === "completed") {
-		if (fetchTimeout){
-			clearTimeout(fetchTimeout);
-			fetchTimeout = null;
-		}
-		showResults(data)
+        if (fetchTimeout){
+            clearTimeout(fetchTimeout);
+            fetchTimeout = null;
+        }
+        showResults(data)
             } else if (data.status === "processing" || data.status === "pending") {
                 fetchTimeout = setTimeout(() => getJobStatus(id), 10000);
             }

@@ -1,20 +1,54 @@
+:root {
+    --bg-page: #e1dbdb;
+    --bg-container: white;
+    --bg-config: #f9f9f9;
+    --bg-input: white;
+    --text-main: black;
+    --text-secondary: #666;
+    --accent: #007bff;
+    --accent-hover: #0056b3;
+    --border-input: #ddd;
+    --border-light: #eee;
+    --bg-item-light: #fbfdff;
+    --bg-item-dark: #f5f9ff;
+    --border-item: #89b9f0;
+    --shadow-item: rgba(0, 42, 96, 0.08);
+}
+html[data-theme="dark"] {
+    --bg-page: #1a1a1a;
+    --bg-container: #2d2d2d;
+    --bg-config: #3a3a3a;
+    --bg-input: #3a3a3a;
+    --text-main: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #4da3ff;
+    --accent-hover: #357abd;
+    --border-input: #4a4a4a;
+    --border-light: #333;
+    --bg-item-light: #2a2a2a;
+    --bg-item-dark: #252525;
+    --border-item: #4a5a7a;
+    --shadow-item: rgba(0, 0, 0, 0.3);
+}
+
 body {
     font-family: Arial, sans-serif;
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #e1dbdb;
+    background-color: var(--bg-page);
+    color: var(--text-main);
 }
 
 .container {
-    background-color: white;
+    background-color: var(--bg-container);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .meta {
-    color: #666;
+    color: var(--text-secondary);
     margin-top: -8px;
     margin-bottom: 24px;
 }
@@ -24,23 +58,26 @@ body {
 }
 
 h2 {
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid var(--accent);
     padding-bottom: 8px;
 }
 
 .config-group {
-    background-color: #f9f9f9;
+    background-color: var(--bg-config);
     padding: 15px;
     border-radius: 4px;
     margin-top: 10px;
 }
 
 .navbar {
-    background-color: white;
-    border-bottom: 2px solid #007bff;
+    background-color: var(--bg-container);
+    border-bottom: 2px solid var(--accent);
     padding: 10px 20px;
     margin-bottom: 20px;
     border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar ul {
@@ -53,10 +90,18 @@ h2 {
 
 .navbar a {
     text-decoration: none;
-    color: #007bff;
+    color: var(--accent);
     font-weight: bold;
 }
 
 .navbar a:hover {
     text-decoration: underline;
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px 10px;
 }

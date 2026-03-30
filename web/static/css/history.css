@@ -8,13 +8,13 @@
 
 .subtitle {
     margin: 4px 0 0;
-    color: #5f6b7a;
+    color: var(--text-secondary);
 }
 
 .clear-history {
     display: inline-block;
     color: white;
-    background-color: #007bff;
+    background-color: var(--accent);
     padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
@@ -25,16 +25,16 @@
 }
 
 .clear-history:hover {
-    background-color: #0056b3;
+    background-color: var(--accent-hover);
     transform: translateY(-1px);
 }
 
 .history-item {
-    background: linear-gradient(180deg, #fbfdff 0%, #f5f9ff 100%);
+    background: linear-gradient(180deg, var(--bg-item-light) 0%, var(--bg-item-dark) 100%);
     border-radius: 10px;
     margin-bottom: 14px;
-    border: 1px solid #89b9f0;
-    box-shadow: 0 2px 8px rgba(0, 42, 96, 0.08);
+    border: 1px solid var(--border-item);
+    box-shadow: 0 2px 8px var(--shadow-item);
     overflow: hidden;
 }
 

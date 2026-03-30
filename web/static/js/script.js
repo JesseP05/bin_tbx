@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme-preference");
-    if (savedTheme === "dark") {
+    if (savedTheme == "dark") {
         document.documentElement.setAttribute("data-theme", "dark");
         document.getElementById("theme-toggle").textContent = "☀️";
     }
 
     document.getElementById("theme-toggle")?.addEventListener("click", () => {
         const html = document.documentElement;
-        if (html.getAttribute("data-theme") === "dark") {
+        if (html.getAttribute("data-theme") == "dark") {
             html.removeAttribute("data-theme");
             document.getElementById("theme-toggle").textContent = "🌙";
             localStorage.setItem("theme-preference", "light");

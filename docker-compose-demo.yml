@@ -1,0 +1,32 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1 
+    volumes:
+      - shared:/data
+      - ./web:/app
+      - ./shared:/app/shared
+    depends_on:
+      - worker
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./worker/Dockerfile
+    volumes:
+      - shared:/data
+      - /students/2025-2026/human_viral_database:/human_viral_db
+    deploy:
+      replicas: 1
+    cpus: 8
+
+volumes:
+  shared:
+  /students/2025-2026/human_viral_database:

@@ -1,4 +1,4 @@
-
+"""Flask app voor uploaden, starten en tonen van pipeline jobs."""
 
 import json
 import time
@@ -14,6 +14,16 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Toon de startpagina of maak een nieuwe analysejob.
+
+    Input:
+        GET: geen form data.
+        POST: request.form met instellingen en request.files met FASTQ.
+
+    Output:
+        HTML response met index pagina.
+        Bij POST bevat de pagina een current_job id.
+    """
     if request.method == "POST":
         job_id = time.time_ns()
         b_paired = request.form.get("fastp-paired", "0") == "1"
@@ -22,6 +32,7 @@ def index():
         job_dir = f"/data/{job_id}"
         os.makedirs(job_dir, exist_ok=True)
 
+        # Paden naar opgeslagen uploadbestanden.
         fastq_path_r1 = None
         fastq_path_r2 = None
 
@@ -43,6 +54,7 @@ def index():
             fastq_path_r1 = f"{job_dir}/{fastq_name}"
             fastq_file.save(fastq_path_r1)
 
+        # Config voor fastp; keys komen uit formvelden.
         fastp_kwargs = {
             "min-quality": request.form.get("fastp-quality", 15),
             "trim-adapters": int(request.form.get("fastp-adapter", 1)),
@@ -54,6 +66,7 @@ def index():
             "paired": int(b_paired),
         }
 
+        # Config voor kraken2; keys komen uit formvelden.
         kraken_kwargs = {
             "confidence": request.form.get("kraken-confidence", 0.0),
             "paired-end": int(request.form.get("kraken-paired", 0)),
@@ -81,16 +94,42 @@ def index():
 
 @app.route("/about")
 def about():
+    """Toon de over pagina.
+
+    Input:
+        Geen expliciete input.
+
+    Output:
+        HTML response met korte uitleg over de app.
+    """
     return render_template('about.html', title="About")
 
 
 @app.route("/how-to")
 def usage():
+    """Toon de handleidingpagina.
+
+    Input:
+        Geen expliciete input.
+
+    Output:
+        HTML response met gebruiksinstructies.
+    """
     return render_template('usage.html', title="How to use")
 
 
 @app.route("/job/<job_id>/status")
 def get_job_status(job_id):
+    """Geef status of eindresultaat van een job terug als JSON.
+
+    Input:
+        job_id (str): Job id uit de URL.
+
+    Output:
+        JSON met volledige resultaten als results bestand bestaat.
+        JSON met alleen status als job nog draait.
+        404 JSON als job niet bestaat.
+    """
     job_dir = f"/data/{job_id}"
     results_file = f"{job_dir}/{job_id}_results.json"
     job_file = f"{job_dir}/{job_id}_job.json"
@@ -109,6 +148,16 @@ def get_job_status(job_id):
 
 @app.route("/data/<path:filepath>")
 def serve_data(filepath):
+    """Serveer een bestand uit de data map.
+
+    Input:
+        filepath (str): Relatief pad binnen /data.
+
+    Output:
+        Bestandsresponse als pad geldig is.
+        403 JSON bij onveilig pad.
+        404 JSON als bestand mist.
+    """
     data_dir = "/data"
     full_path = os.path.join(data_dir, filepath)
 
@@ -123,6 +172,14 @@ def serve_data(filepath):
 
 @app.route("/history")
 def history():
+    """Bouw een lijst met afgeronde jobs voor de history pagina.
+
+    Input:
+        Geen expliciete input.
+
+    Output:
+        HTML response met gesorteerde jobgeschiedenis.
+    """
     data_dir = "/data"
     history = []
     for job_dir in os.listdir(data_dir):
@@ -146,6 +203,14 @@ def history():
 
 @app.route("/clear-history")
 def clear_history():
+    """Verwijder alle jobmappen en ga terug naar de startpagina.
+
+    Input:
+        Geen expliciete input.
+
+    Output:
+        Redirect response naar index.
+    """
     data_dir = "/data"
     for job_dir in os.listdir(data_dir):
         job_path = os.path.join(data_dir, job_dir)
@@ -156,8 +221,16 @@ def clear_history():
 
 @app.route("/rm/<job_id>")
 def rm_individual(job_id):
+    """Verwijder een enkele jobmap op basis van job id.
+
+    Input:
+        job_id (str): Job id uit de URL.
+
+    Output:
+        Redirect response naar history pagina.
+    """
     job_dir = f"/data/{job_id}"
-    res = subprocess.run(f'rm -rf {job_dir}', shell=True)
+    subprocess.run(f'rm -rf {job_dir}', shell=True)
     return redirect(url_for('history'))
 
 

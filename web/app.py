@@ -54,7 +54,7 @@ def index():
             fastq_path_r1 = f"{job_dir}/{fastq_name}"
             fastq_file.save(fastq_path_r1)
 
-        # Config voor fastp; keys komen uit formvelden.
+        # Config voor fastp; keys komen uit webformulier.
         fastp_kwargs = {
             "min-quality": request.form.get("fastp-quality", 15),
             "trim-adapters": int(request.form.get("fastp-adapter", 1)),
@@ -66,7 +66,7 @@ def index():
             "paired": int(b_paired),
         }
 
-        # Config voor kraken2; keys komen uit formvelden.
+        # Config voor kraken2; keys komen uit webformulier.
         kraken_kwargs = {
             "confidence": request.form.get("kraken-confidence", 0.0),
             "paired-end": int(request.form.get("kraken-paired", 0)),
@@ -94,26 +94,14 @@ def index():
 
 @app.route("/about")
 def about():
-    """Toon de over pagina.
-
-    Input:
-        Geen expliciete input.
-
-    Output:
-        HTML response met korte uitleg over de app.
+    """Toon de about pagina.
     """
     return render_template('about.html', title="About")
 
 
 @app.route("/how-to")
 def usage():
-    """Toon de handleidingpagina.
-
-    Input:
-        Geen expliciete input.
-
-    Output:
-        HTML response met gebruiksinstructies.
+    """Toon de how to pagina.
     """
     return render_template('usage.html', title="How to use")
 
@@ -126,8 +114,8 @@ def get_job_status(job_id):
         job_id (str): Job id uit de URL.
 
     Output:
-        JSON met volledige resultaten als results bestand bestaat.
-        JSON met alleen status als job nog draait.
+        JSON met resultaten als results bestand bestaat.
+        JSON met alleen status als job nog bezig is.
         404 JSON als job niet bestaat.
     """
     job_dir = f"/data/{job_id}"
@@ -148,14 +136,14 @@ def get_job_status(job_id):
 
 @app.route("/data/<path:filepath>")
 def serve_data(filepath):
-    """Serveer een bestand uit de data map.
+    """Geef een bestand uit de data map.
 
     Input:
-        filepath (str): Relatief pad binnen /data.
+        filepath (str): pad binnen /data.
 
     Output:
-        Bestandsresponse als pad geldig is.
-        403 JSON bij onveilig pad.
+        Bestandsresponse als pad klopt.
+        403 JSON bij ongeldig pad.
         404 JSON als bestand mist.
     """
     data_dir = "/data"
@@ -172,13 +160,10 @@ def serve_data(filepath):
 
 @app.route("/history")
 def history():
-    """Bouw een lijst met afgeronde jobs voor de history pagina.
-
-    Input:
-        Geen expliciete input.
+    """Maak een lijst met jobs voor de history pagina.
 
     Output:
-        HTML response met gesorteerde jobgeschiedenis.
+        HTML response met jobgeschiedenis.
     """
     data_dir = "/data"
     history = []
@@ -204,9 +189,6 @@ def history():
 @app.route("/clear-history")
 def clear_history():
     """Verwijder alle jobmappen en ga terug naar de startpagina.
-
-    Input:
-        Geen expliciete input.
 
     Output:
         Redirect response naar index.

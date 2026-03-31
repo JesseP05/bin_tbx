@@ -1,4 +1,4 @@
-"""Job class"""
+"""Datamodel voor pipeline jobs en command opbouw."""
 
 import json
 
@@ -17,6 +17,20 @@ class Job:
         *args,
         **kwargs,
     ):
+        """Maak een Job object met paden, status en configuratie.
+
+        Input:
+            job_id: Unieke id van de job.
+            fastq_filename_r1: Pad naar FASTQ read 1.
+            fastq_filename_r2: Pad naar FASTQ read 2 of None.
+            filepath: Map van de job in /data.
+            status: Huidige jobstatus.
+            fastp: FastP configuratie object.
+            kraken: Kraken configuratie object.
+
+        Output:
+            Een ingevuld Job object in geheugen.
+        """
         self.job_id = job_id
         self.fastq_filename_r1 = fastq_filename_r1
         self.fastq_filename_r2 = fastq_filename_r2
@@ -39,7 +53,16 @@ class Job:
         self.krona_output = f"{self.filepath}/{self.job_id}_krona.html"
 
     class FastP:
-        def __init__(self, threads = 8, **kwargs):
+        def __init__(self, threads=8, **kwargs):
+            """Zet fastp instellingen om naar nette attribuutwaarden.
+
+            Input:
+                threads: Aantal threads voor fastp.
+                kwargs: Waarden uit formulier zoals quality en cut flags.
+
+            Output:
+                Een FastP configuratie object in geheugen.
+            """
             self.threads = threads
             self.quality = int(kwargs.get('min-quality'))
             self.trim_adapters = bool(kwargs.get('trim-adapters'))
@@ -51,7 +74,17 @@ class Job:
             self.paired = bool(kwargs.get('paired'))
 
     class Kraken:
-        def __init__(self, db = "/human_viral_db", threads=8, **kwargs):
+        def __init__(self, db="/human_viral_db", threads=8, **kwargs):
+            """Zet kraken instellingen om naar nette attribuutwaarden.
+
+            Input:
+                db: Pad naar de kraken database.
+                threads: Aantal threads voor kraken.
+                kwargs: Waarden uit formulier zoals confidence.
+
+            Output:
+                Een Kraken configuratie object in geheugen.
+            """
             self.db = db
             self.threads = threads
             self.confidence = float(kwargs.get('confidence'))
@@ -61,7 +94,14 @@ class Job:
             self.use_science_names_str = "--use-names" if self.b_use_science_names else ""
 
     def create_commands(self):
-        """Create cli commands for running fastp, kraken and krona with given configurations."""
+        """Maak de shell commands voor fastp, kraken2 en krona.
+
+        Input:
+            Gebruikt waarden uit self.fastp, self.kraken en job paden.
+
+        Output:
+            Vult self.fastp_command, self.kraken_command en self.krona_command.
+        """
 
         trim_adapter_flag = "" if self.fastp.trim_adapters else "-A"
         cut_front_flag = "-5" if self.fastp.cut_front else ""
@@ -107,7 +147,14 @@ class Job:
         self.krona_command = f"ktImportTaxonomy -m 3 -t 5 -o {self.krona_output} {self.kraken_report}"
 
     def save(self):
-        """Save job info"""
+        """Sla jobinformatie op als JSON bestand in de jobmap.
+
+        Input:
+            Gebruikt alle huidige jobvelden op self.
+
+        Output:
+            Schrijft {job_id}_job.json naar disk.
+        """
         is_paired = bool(self.fastq_filename_r2) and bool(getattr(self.fastp, "paired", True))
 
         job_data = {

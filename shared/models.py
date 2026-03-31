@@ -51,7 +51,7 @@ class Job:
 
     class FastP:
         def __init__(self, threads=8, **kwargs):
-            """Zet fastp instellingen om naar nette attribuutwaarden.
+            """Zet fastp instellingen om naar variabelen.
 
             Input:
                 threads: Aantal threads voor fastp.
@@ -69,15 +69,12 @@ class Job:
 
     class Kraken:
         def __init__(self, db="/human_viral_db", threads=8, **kwargs):
-            """Zet kraken instellingen om naar nette attribuutwaarden.
+            """Zet kraken instellingen om naar variabelen.
 
             Input:
                 db: Pad naar de kraken database.
                 threads: Aantal threads voor kraken.
                 kwargs: Waarden uit formulier zoals confidence.
-
-            Output:
-                Een Kraken configuratie object in geheugen.
             """
             self.db = db
             self.threads = threads
@@ -99,6 +96,7 @@ class Job:
         cut_tail_flag = "-3" if self.fastp.cut_tail else ""
         dedup_flag = "--dedup" if self.fastp.deduplicate else ""
 
+        # Alleen paired-end als de optie aan staat en read 2 er is.
         is_paired = self.fastp.paired and self.fastq_filename_r2 != None
 
         if is_paired:
@@ -118,6 +116,7 @@ class Job:
                 f"-o {self.fastp_output_r1}"
             )
 
+        # Voeg de --use-names vlag alleen toe als het gekozen is op de website.
         kraken_name_flag = f" {self.kraken.use_science_names_str}" if self.kraken.use_science_names_str else ""
 
         if is_paired:

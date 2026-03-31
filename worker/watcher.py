@@ -199,9 +199,9 @@ def clean_unfinished_jobs():
     except Exception as e:
         print(f"Error in cleanup handler: {e}")
 
-
 # register function to run on shutdown
-atexit.register(clean_unfinished_jobs)
+if os.getenv("IN_DOCKER"):
+    atexit.register(clean_unfinished_jobs)
 
 if __name__ == "__main__":
     main()

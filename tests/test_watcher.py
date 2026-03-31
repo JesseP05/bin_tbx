@@ -1,4 +1,4 @@
-# tests/test_watcher.py
+"""test module voor watcher.py"""
 
 import json
 import os

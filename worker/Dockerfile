@@ -83,7 +83,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends dos2unix && \
     chmod +x entry.sh && \
     rm -rf /var/lib/apt/lists/*
 
-# database downloadd
+# database download
 ENTRYPOINT ["bash", "entry.sh"]
+
+ENV IN_DOCKER=1
 
 CMD ["python", "-u", "watcher.py"]

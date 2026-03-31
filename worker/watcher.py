@@ -1,3 +1,9 @@
+"""
+    watcher.py
+    Script that finds new/unfinished jobs and processes them by calling tools using subprocess.
+
+"""
+
 
 import json
 import time
@@ -11,7 +17,15 @@ JOBS_DIR = "/data"
 
 
 class JobResult:
+    """Class that encapsulates processed jobs results.
+    args : 
+    Takes in job instance and translates its properties to a new instance of JobResult.
+    """
     def __init__(self, job):
+        """Translate job to a jobresult file.
+        args : 
+        job : Instance of job class.
+        """
         self.job_id = job.job_id
         self.status = "completed"
         self.fastq_report = f"{job.filepath}/{job.job_id}_fastp.html"
@@ -23,11 +37,27 @@ class JobResult:
         self.job_size = job.job_size
     
     def save(self, job_dir):
+        """Save job result to file.
+        args :
+        job_dir : Location whree the job should be saved.
+        """
         with open(f"{job_dir}/{self.job_id}_results.json", "w") as f:
             json.dump(self.__dict__, f, indent=4)
 
+    def __str__(self):
+        """return job id and status in string form"""
+        job_string = f"{self.job_id} is: {self.status}"
+        return job_string
+
 
 def load_job(job_file):
+    """Load job instance from saved json file
+    args :
+    job_file : location of the json file.
+    
+    returns : 
+    job : instance of models.Job.
+    """
     with open(job_file, "r") as f:
         data = json.load(f)
     job = Job(
@@ -48,6 +78,12 @@ def load_job(job_file):
 
 
 def run_tool(job, tool, command):
+    """runs tools with command line arguments
+    args : 
+    job : the current job instance.
+    tool : current tool to run.
+    command : the command that runs the tool with parameters.
+    """
     try:
         print(f"Running {tool}...")
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -78,6 +114,10 @@ def run_tool(job, tool, command):
 
 
 def process_job(job):
+    """function that handles proper job loading and saving.
+    args : 
+    job : instance of models.Job
+    """
     job.status = "processing"
     job.save()
 
@@ -91,6 +131,7 @@ def process_job(job):
             return
 
     job.status = "completed"
+    # get job directories filesize to show on history page
     result = subprocess.run(f"du -hs {job.filepath}", shell=True, stdout=subprocess.PIPE, text=True)
     job.job_size = result.stdout.strip().split()[0] if result.returncode == 0 else None
     job.save()
@@ -101,6 +142,10 @@ def process_job(job):
 
 
 def cleanup_files(filepath):
+    """function that cleans up leftover/unfinished files on filepath
+    args : 
+    filepath : job directory path
+    """
     try:
         for file in os.listdir(filepath):
             if not file.endswith('_job.json'):
@@ -112,6 +157,8 @@ def cleanup_files(filepath):
 
 
 def main():
+    """function that handles main waiting loop and calls functions when necessary
+    """
     print("Watching for jobs..")
     while True:
         try:
@@ -133,6 +180,7 @@ def main():
 
 
 def clean_unfinished_jobs():
+    """handles cleanup of unfinished jobs when shutdown is cutting off a process."""
     print("Cleaning up messeeeesss")
     try:
         for job_id in os.listdir(JOBS_DIR):
@@ -152,6 +200,7 @@ def clean_unfinished_jobs():
         print(f"Error in cleanup handler: {e}")
 
 
+# register function to run on shutdown
 atexit.register(clean_unfinished_jobs)
 
 if __name__ == "__main__":

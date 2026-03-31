@@ -48,6 +48,11 @@ class Job:
         self.kraken_report = f"{self.filepath}/{self.job_id}_kraken_report.txt"
         self.kraken_output = f"{self.filepath}/{self.job_id}_kraken_output.txt"
         self.krona_output = f"{self.filepath}/{self.job_id}_krona.html"
+    
+    
+    def __str__(self):
+        job_info = f"id: {self.job_id}\nstatus: {self.status}\nfastqname_1:{self.fastq_filename_r1}"
+        return job_info
 
     class FastP:
         def __init__(self, threads=8, **kwargs):
@@ -67,6 +72,11 @@ class Job:
             self.deduplicate = kwargs.get('deduplicate')
             self.paired = kwargs.get('paired')
 
+        def __str__(self):
+            """prints some info about fastpinstance"""
+            info = f"fastp instance instantiated with threads {self.threads}, set to filter by quality: {self.quality}"
+            return info
+
     class Kraken:
         def __init__(self, db="/human_viral_db", threads=8, **kwargs):
             """Zet kraken instellingen om naar variabelen.
@@ -83,6 +93,11 @@ class Job:
             self.b_use_science_names = kwargs.get('use-science-names')
             self.base_quality = kwargs.get('base-quality')
             self.use_science_names_str = "--use-names" if self.b_use_science_names else ""
+
+        def __str__(self):
+            """prints some info about kraken instance"""
+            info = f"kraken2 insatnce info: threads:{self.threads}, db: {self.db}, confidence: {self.confidence}"
+            return 
 
     def create_commands(self):
         """Maak de shell commands voor fastp, kraken2 en krona.

@@ -20,16 +20,13 @@ class Job:
         """Maak een Job object met paden, status en configuratie.
 
         Input:
-            job_id: Unieke id van de job.
+            job_id: id van de job.
             fastq_filename_r1: Pad naar FASTQ read 1.
             fastq_filename_r2: Pad naar FASTQ read 2 of None.
             filepath: Map van de job in /data.
-            status: Huidige jobstatus.
-            fastp: FastP configuratie object.
-            kraken: Kraken configuratie object.
-
-        Output:
-            Een ingevuld Job object in geheugen.
+            status: jobstatus.
+            fastp: FastP configuratie.
+            kraken: Kraken configuratie.
         """
         self.job_id = job_id
         self.fastq_filename_r1 = fastq_filename_r1
@@ -59,19 +56,16 @@ class Job:
             Input:
                 threads: Aantal threads voor fastp.
                 kwargs: Waarden uit formulier zoals quality en cut flags.
-
-            Output:
-                Een FastP configuratie object in geheugen.
             """
             self.threads = threads
-            self.quality = int(kwargs.get('min-quality'))
-            self.trim_adapters = bool(kwargs.get('trim-adapters'))
-            self.length_min = int(kwargs.get('length-min'))
-            self.length_max = int(kwargs.get('length-max'))
-            self.cut_front = bool(kwargs.get('cut-front'))
-            self.cut_tail = bool(kwargs.get('cut-tail'))
-            self.deduplicate = bool(kwargs.get('deduplicate'))
-            self.paired = bool(kwargs.get('paired'))
+            self.quality = kwargs.get('min-quality')
+            self.trim_adapters = kwargs.get('trim-adapters')
+            self.length_min = kwargs.get('length-min')
+            self.length_max = kwargs.get('length-max')
+            self.cut_front = kwargs.get('cut-front')
+            self.cut_tail = kwargs.get('cut-tail')
+            self.deduplicate = kwargs.get('deduplicate')
+            self.paired = kwargs.get('paired')
 
     class Kraken:
         def __init__(self, db="/human_viral_db", threads=8, **kwargs):
@@ -87,20 +81,17 @@ class Job:
             """
             self.db = db
             self.threads = threads
-            self.confidence = float(kwargs.get('confidence'))
-            self.paired_end = bool(kwargs.get('paired-end'))
-            self.b_use_science_names = bool(kwargs.get('use-science-names'))
-            self.base_quality = int(kwargs.get('base-quality'))
+            self.confidence = kwargs.get('confidence')
+            self.paired_end = kwargs.get('paired-end')
+            self.b_use_science_names = kwargs.get('use-science-names')
+            self.base_quality = kwargs.get('base-quality')
             self.use_science_names_str = "--use-names" if self.b_use_science_names else ""
 
     def create_commands(self):
         """Maak de shell commands voor fastp, kraken2 en krona.
 
         Input:
-            Gebruikt waarden uit self.fastp, self.kraken en job paden.
-
-        Output:
-            Vult self.fastp_command, self.kraken_command en self.krona_command.
+            Gebruikt variabelen uit self.fastp, self.kraken en job paden.
         """
 
         trim_adapter_flag = "" if self.fastp.trim_adapters else "-A"
@@ -147,15 +138,12 @@ class Job:
         self.krona_command = f"ktImportTaxonomy -m 3 -t 5 -o {self.krona_output} {self.kraken_report}"
 
     def save(self):
-        """Sla jobinformatie op als JSON bestand in de jobmap.
+        """Sla job informatie op als JSON bestand in de job map.
 
         Input:
-            Gebruikt alle huidige jobvelden op self.
-
-        Output:
-            Schrijft {job_id}_job.json naar disk.
+            Gebruikt alle self variabelen.
         """
-        is_paired = bool(self.fastq_filename_r2) and bool(getattr(self.fastp, "paired", True))
+        is_paired = self.fastq_filename_r2 and getattr(self.fastp, "paired", True)
 
         job_data = {
             "job_id": self.job_id,

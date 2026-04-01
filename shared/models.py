@@ -97,7 +97,7 @@ class Job:
         def __str__(self):
             """prints some info about kraken instance"""
             info = f"kraken2 insatnce info: threads:{self.threads}, db: {self.db}, confidence: {self.confidence}"
-            return 
+            return info
 
     def create_commands(self):
         """Maak de shell commands voor fastp, kraken2 en krona.

@@ -2,28 +2,21 @@
 
 # vrijwel zelfde commands als manual install uit readme v1
 
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 # dependencies voor compileren van fastp en kraken2
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libdeflate-dev \
-    libisal-dev \
-    isal \
-    build-essential \
     zlib1g-dev \
     wget \
     tar \
     make \
+    build-essential \
+    curl \
     perl && \
     rm -rf /var/lib/apt/lists/*
 
-# download en compileer fastp
-RUN wget https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz && \
-    tar -xf v1.1.0.tar.gz && \
-    cd fastp-1.1.0 && \
-    make -j && make install && \
-    cd .. && \
-    rm -rf v1.1.0.tar.gz fastp-1.1.0
+RUN wget http://opengene.org/fastp/fastp -O /usr/local/bin/fastp && \
+    chmod +x /usr/local/bin/fastp
 
 # downlaod en compileer kraken2
 RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz && \
@@ -67,11 +60,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && \
     apt-get remove -y git && \
     rm -rf /var/lib/apt/lists/*
 
-# python dependencies install for watcher
 WORKDIR /app
-
-#COPY worker/requirements.txt .
-#RUN pip install --no-cache-dir -r requirements.txt
 
 COPY shared/ ./shared/
 COPY worker/*.py ./

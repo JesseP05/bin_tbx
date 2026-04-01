@@ -98,13 +98,16 @@ def run_tool(job, tool, command):
         match tool:
             case "fastp":
                 for f in job.rm_after_fastp:
-                    os.remove(f)
+                    if f:
+                        os.remove(f)
             case "kraken2":
                 for f in job.rm_after_kraken:
-                    os.remove(f)
+                    if f:
+                        os.remove(f)
             case "krona":
                 for f in job.rm_after_krona:
-                    os.remove(f)
+                    if f:
+                        os.remove(f)
         return True
     except Exception as e:
         print(f"{tool} exception: {e}")

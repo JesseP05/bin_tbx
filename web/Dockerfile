@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.11.15-slim
+FROM python:3.15.0a7-slim
 
 RUN echo "bleep boop, starting webserver.."
 WORKDIR /app

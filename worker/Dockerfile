@@ -2,7 +2,7 @@
 
 # vrijwel zelfde commands als manual install uit readme v1
 
-FROM python:3.11-slim AS builder
+FROM python:3.11.15-slim AS builder
 
 # dependencies voor compileren van fastp en kraken2
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -27,7 +27,7 @@ RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz
     rm -rf v2.17.1.tar.gz kraken2-2.17.1
 
 # runtime image
-FROM python:3.11-slim
+FROM python:3.11.15-slim
 
 # weer dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \

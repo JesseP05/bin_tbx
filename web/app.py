@@ -31,6 +31,12 @@ def index():
 
         job_dir = f"/data/{job_id}"
         os.makedirs(job_dir, exist_ok=True)
+        temp = Job(
+            job_id,
+            filepath=job_dir,
+            status="downloading",
+        )
+        temp.save()
 
         # Paden naar opgeslagen uploadbestanden.
         fastq_path_r1 = None

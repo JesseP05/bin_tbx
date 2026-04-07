@@ -1,8 +1,8 @@
-# Bin Pipeline
-- [Bin Pipeline](#bin-pipeline)
+# Bio info Pipeline
+- [Bio info Pipeline](#bio-info-pipeline)
   - [Inleiding](#inleiding)
   - [Hoofdvraag:](#hoofdvraag)
-    - [Tools: TODO: uitleg](#tools-todo-uitleg)
+    - [Tools](#tools)
     - [Requirements](#requirements)
 - [Installation Instructions](#installation-instructions)
   - [Uninstalling](#uninstalling)
@@ -10,7 +10,7 @@
 
 ## Inleiding 
 
-Voor de opdracht van BIN toolbox gaan we een website bouwen die en bio info pipeline bestuurt. De opdrachtgevers, Ronald W. en Peter K., hebben ons gevraagd een interactieve interface te bouwen voor het aanroepen van verschillende bio informatische tools. De keuze in de tools was vrij aan ons, wij hebben vervolgens gekozen voor FastP en Kraken2 om onze hoofdonderzoeksvraag te kunnen beantwoorden (zie onder). Daarnaast is het van belang dat onze tools interim-rapporten deelt met de gebruiker over de kwaliteit van de door de gebruiker meegegeven DNA-sequentiesamples. De focusgroep van gebruikers bestaat uit hobbyisten, studenten, en researchers. 
+Voor de opdracht van BIN toolbox gaan we een website bouwen die en bioinformatische pipeline bestuurt. De opdrachtgevers, Ronald W. en Peter K., hebben ons gevraagd een interactieve interface te bouwen voor het aanroepen van verschillende bio informatische tools. De keuze in de tools was vrij aan ons, wij hebben vervolgens gekozen voor FastP en Kraken2 om onze hoofdonderzoeksvraag te kunnen beantwoorden (zie onder). Daarnaast is het van belang dat onze tools interim-rapporten deelt met de gebruiker over de kwaliteit van de door de gebruiker meegegeven DNA-sequentiesamples. De focusgroep van gebruikers bestaat uit hobbyisten, studenten, en researchers. 
 
 ## Hoofdvraag:
 “Hoe kunnen we DNA-data van verschillende soorten virussen specifiek classificeren en visualiseren?”
@@ -18,10 +18,10 @@ Voor de opdracht van BIN toolbox gaan we een website bouwen die en bio info pipe
 Waarom dit van belang is: Met de uitbraak van Covid-19 hebben we allemaal meegemaakt hoe belangrijk het is om vroegtijdig een diagnose te kunnen stellen. Deze tool zal een soort imitatie zijn van tools die bijvoorbeeld het RIVM bezit om virussen snel te classificeren en daarmee een positieve ofwel negatieve diagnose te stellen.
 
 
-### Tools: TODO: uitleg
-1. FASTP 
-2. KRAKEN2 
-3. Krona (visualisatie)
+### Tools
+1. **FASTP** — Kwaliteitscontrole en verwerking van DNA-sequentiedata. Detecteert vervuiling, verwijdert lage-kwaliteitsbases en adaptersequenties.
+2. **KRAKEN2** — Taxonomische classificatie van sequenties. Identificeert welke virussen aanwezig zijn in het monster.
+3. **Krona** — Interactieve visualisatie van de taxonomische classificatieresultaten in een interactieve kaart.
 
 ### Requirements
 * Docker compatible OS

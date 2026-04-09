@@ -4,6 +4,8 @@ import json
 import time
 import os
 import subprocess
+import sys
+import signal
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from werkzeug.utils import secure_filename
 from shared.models import Job
@@ -220,6 +222,16 @@ def rm_individual(job_id):
     job_dir = f"/data/{job_id}"
     subprocess.run(f'rm -rf {job_dir}', shell=True)
     return redirect(url_for('history'))
+
+
+def handle_sigterm(signum, frame):
+    """handles SIGtERM signal"""
+    print("Stopping webserver...")
+    sys.exit(0)
+
+
+# register function to run on shutdown
+signal.signal(signal.SIGTERM, handle_sigterm)
 
 
 if __name__ == "__main__":

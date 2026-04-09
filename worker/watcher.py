@@ -9,7 +9,8 @@ import json
 import time
 import os
 import subprocess
-import atexit
+import signal
+import sys
 from shared.models import Job
 
 
@@ -186,7 +187,7 @@ def main():
 
 def clean_unfinished_jobs():
     """handles cleanup of unfinished jobs when shutdown is cutting off a process."""
-    print("Cleaning up messeeeesss")
+    print("Cleaning up messes..")
     try:
         for job_id in os.listdir(JOBS_DIR):
             job_dir = os.path.join(JOBS_DIR, job_id)
@@ -204,9 +205,17 @@ def clean_unfinished_jobs():
     except Exception as e:
         print(f"Error in cleanup handler: {e}")
 
+
+
+def handle_sigterm(signum, frame):
+    """handles SIGtERM signal"""
+    clean_unfinished_jobs()
+    sys.exit(0)
+
+
 # register function to run on shutdown
 if os.getenv("IN_DOCKER"):
-    atexit.register(clean_unfinished_jobs)
+    signal.signal(signal.SIGTERM, handle_sigterm)
 
 if __name__ == "__main__":
     main()

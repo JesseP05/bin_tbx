@@ -12,11 +12,51 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     build-essential \
     curl \
-    perl && \
+    perl \
+    libdeflate-dev \
+    libisal-dev \
+    isal && \
     rm -rf /var/lib/apt/lists/*
 
-RUN wget http://opengene.org/fastp/fastp -O /usr/local/bin/fastp && \
-    chmod +x /usr/local/bin/fastp
+ARG TARGETARCH
+
+RUN set -eux; \
+    if [ "$TARGETARCH" = "arm64" ]; then \
+        echo "Building for ARM64 with fastp + highway"; \
+        \
+        # Install build dependencies
+        apt-get update && apt-get install -y \
+            git \
+            cmake \
+            build-essential \
+            wget \
+        ; \
+        \
+        # Build and install Google Highway
+        git clone --depth=1 --branch 1.3.0 https://github.com/google/highway.git; \
+        cd highway; \
+        cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DHWY_ENABLE_TESTS=OFF \
+            -DHWY_ENABLE_EXAMPLES=OFF; \
+        cmake --build build -j; \
+        cmake --install build; \
+        cd ..; \
+        rm -rf highway; \
+        \
+        # Build fastp from source
+        git clone --depth=1 https://github.com/OpenGene/fastp.git; \
+        cd fastp; \
+        make -j; \
+        make install; \
+        cd ..; \
+        rm -rf fastp; \
+    else \
+        echo "Building for AMD64 (using prebuilt fastp)"; \
+        wget http://opengene.org/fastp/fastp -O /usr/local/bin/fastp; \
+        chmod +x /usr/local/bin/fastp; \
+    fi
 
 # downlaod en compileer kraken2
 RUN wget https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz && \

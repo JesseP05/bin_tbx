@@ -197,7 +197,7 @@ def clean_unfinished_jobs():
                     job = load_job(job_file)
                     if job.status == "processing":
                         print(f"Cleaning up unfinished job {job.job_id}...")
-                        job.status = "pending"
+                        job.status = "Failed: interupted"
                         job.save()
                         cleanup_files(job.filepath)
                 except Exception as e:

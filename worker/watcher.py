@@ -22,13 +22,14 @@ class JobResult:
     args : 
     Takes in job instance and translates its properties to a new instance of JobResult.
     """
-    def __init__(self, job):
+    def __init__(self, job, status="completed"):
         """Translate job to a jobresult file.
         args : 
         job : Instance of job class.
+        status : Status of the job.
         """
         self.job_id = job.job_id
-        self.status = "completed"
+        self.status = status
         self.fastq_report = f"{job.filepath}/{job.job_id}_fastp.html"
         self.fastp_output = f"{job.filepath}/{job.job_id}_fastp_output.fastq"
         self.kraken_report = f"{job.filepath}/{job.job_id}_kraken_report.txt"
@@ -152,7 +153,7 @@ def cleanup_files(filepath):
     """
     try:
         for file in os.listdir(filepath):
-            if not file.endswith('_job.json'):
+            if not file.endswith('_job.json') and not file.endswith('_results.json'):
                 file_path = os.path.join(filepath, file)
                 if os.path.isfile(file_path):
                     os.remove(file_path)
@@ -199,6 +200,7 @@ def clean_unfinished_jobs():
                         print(f"Cleaning up unfinished job {job.job_id}...")
                         job.status = "Failed: interupted"
                         job.save()
+                        JobResult(job, status=job.status).save(job.filepath)
                         cleanup_files(job.filepath)
                 except Exception as e:
                     print(f"Error cleaning job {job_id}: {e}")
